@@ -79,7 +79,7 @@
                             <manifest>
                                 <addClasspath>true</addClasspath>
                                 <classpathPrefix>lib/</classpathPrefix>
-                                <mainClass>com.vutbr.feec.main.main.App</mainClass>
+                                <mainClass>com.vutbr.feec.main.App</mainClass>
                             </manifest>
                         </archive>
                     </configuration>

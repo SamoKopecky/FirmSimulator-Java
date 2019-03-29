@@ -1,4 +1,4 @@
-package com.vutbr.feec.main.IO;
+package com.vutbr.feec.IO;
 
 public class DatabaseReader {
 }
