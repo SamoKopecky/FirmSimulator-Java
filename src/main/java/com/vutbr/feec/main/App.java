@@ -39,6 +39,8 @@ public class App {
         for (Employee employee : firm.getListOfEmployees()) {
             System.out.println(employee.getListOfJobs());
         }
+        System.out.println(firm.getListOfEmployees().get(1).action(TypeOfJob.TECHNICAL_JOB,
+                firm.getListOfEmployees().get(0)));
 
     }
 }

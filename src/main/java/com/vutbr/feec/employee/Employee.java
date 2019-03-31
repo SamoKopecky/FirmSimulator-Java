@@ -16,8 +16,10 @@ public abstract class Employee {
     private int contractLength = 271560;
     private List<Job> listOfJobs;
     Set<TypeOfJob> canDoTypeOfJobs;
+    private boolean active;
 
     public Employee(String firstName, String secondName) {
+        active = true;
         listOfJobs = new ArrayList<>();
         canDoTypeOfJobs = new HashSet<>();
         this.id = idCounter;
@@ -40,6 +42,37 @@ public abstract class Employee {
 
     public List<Job> getListOfJobs() {
         return listOfJobs;
+    }
+
+    public void decreaseContractLength(int length) {
+        contractLength -= length;
+        if (contractLength <= 0) {
+            active = false;
+        }
+    }
+
+    public boolean setContractLength(int contractLength) {
+        if (!(this instanceof CEO)) {
+            this.contractLength = contractLength;
+            if (this.contractLength <= 0) {
+                active = false;
+            }
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String action(TypeOfJob typeOfJob, Employee employee) {
+        if (canDoTypeOfJobs.contains(typeOfJob) && active) {
+            return typeOfJob.action(employee);
+        } else {
+            return "nema tuto pracu";
+        }
     }
 
     @Override

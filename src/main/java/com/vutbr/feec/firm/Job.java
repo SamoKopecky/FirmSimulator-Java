@@ -33,6 +33,10 @@ public class Job {
             this.duration -= duration * workEfficiency;
         }
 
+        for (Employee employee : workingEmployees) {
+            employee.decreaseContractLength(workDonePerPerson);
+        }
+
         int moneyUsed = 0;
         for (Employee employee : workingEmployees) {
             moneyUsed += (int) (employee.getTariff() * (double) workDonePerPerson);

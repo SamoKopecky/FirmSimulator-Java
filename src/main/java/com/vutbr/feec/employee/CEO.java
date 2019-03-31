@@ -1,6 +1,6 @@
 package com.vutbr.feec.employee;
 
-public class CEO extends Employee {
+public class CEO extends Employee{
 
     private static final int TARIFF = 350;
 
