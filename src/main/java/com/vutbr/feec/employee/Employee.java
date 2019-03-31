@@ -67,6 +67,14 @@ public abstract class Employee {
         return firstName;
     }
 
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
     public String action(TypeOfJob typeOfJob, Employee employee) {
         if (canDoTypeOfJobs.contains(typeOfJob) && active) {
             return typeOfJob.action(employee);

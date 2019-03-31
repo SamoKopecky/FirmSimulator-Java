@@ -1,6 +1,5 @@
 package com.vutbr.feec.main;
 
-import com.vutbr.feec.employee.Employee;
 import com.vutbr.feec.employee.TypeOfJob;
 import com.vutbr.feec.firm.Firm;
 import com.vutbr.feec.firm.Job;
@@ -19,11 +18,18 @@ public class App {
 
         firm.addJob(TypeOfJob.ADMINISTRATIVE_JOB, 6, firm.getListOfJobs().size());
         for (Job job : firm.getListOfJobs()) {
-            System.out.println(job);
+            System.out.println(job + "\n");
         }
-        firm.removeEmployee(0);
+        firm.makeEmployeeSick(0);
+        firm.removeEmployee(4);
         for (Job job : firm.getListOfJobs()) {
-            System.out.println(job);
+            System.out.println(job + "\n");
+        }
+        firm.getListOfEmployees().get(0).setActive(true);
+        firm.addJob(TypeOfJob.ADMINISTRATIVE_JOB, 6, firm.getListOfJobs().size());
+        firm.doJob(0,6);
+        for (Job job : firm.getListOfJobs()) {
+            System.out.println(job + "\n");
         }
 
     }

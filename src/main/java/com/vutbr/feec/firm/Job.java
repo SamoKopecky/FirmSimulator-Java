@@ -11,12 +11,10 @@ public class Job {
     private int workEfficiency;
     private int id;
     private List<Employee> workingEmployees;
-    private static int idIncrement = 0;
 
-    Job(int duration, TypeOfJob typeOfJob, int workEfficiency, List<Employee> workingEmployees) {
+    Job(int duration, TypeOfJob typeOfJob, int workEfficiency, List<Employee> workingEmployees, int id) {
         this.workingEmployees = workingEmployees;
-        this.id = idIncrement;
-        idIncrement++;
+        this.id = id;
         this.duration = duration;
         this.typeOfJob = typeOfJob;
         this.workEfficiency = workEfficiency;

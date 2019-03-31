@@ -53,12 +53,12 @@ public class Firm {
         }
 
         int tariff = 0;
+        int maxWork = 0;
         List<Employee> workingEmployees = new ArrayList<>();
         List<Employee> capableEmployees = new ArrayList<>();
-        int maxWork = 0;
 
         for (Employee employee : listOfEmployees) {
-            if (employee.getCanDoTypeOfJobs().contains(typeOfJob)) {
+            if (employee.getCanDoTypeOfJobs().contains(typeOfJob) && employee.isActive()) {
                 capableEmployees.add(employee);
             }
         }
@@ -89,7 +89,7 @@ public class Firm {
             }
         }
 
-        Job job = new Job(duration, typeOfJob, workingEmployees.size(), workingEmployees);
+        Job job = new Job(duration, typeOfJob, workingEmployees.size(), workingEmployees, id);
         listOfJobs.add(job);
         for (Employee employee : workingEmployees) {
             employee.getListOfJobs().add(job);
@@ -108,6 +108,20 @@ public class Firm {
         listOfEmployees.remove(id);
         for (Job job : employeeToRemove.getListOfJobs()) {
             this.addJob(job.getTypeOfJob(), job.getDuration(), job.getId());
+            if (employeeToRemove.getListOfJobs().isEmpty()) {
+                return;
+            }
+        }
+    }
+
+    public void makeEmployeeSick(int id) {
+        Employee sickEmployee = listOfEmployees.get(id);
+        sickEmployee.setActive(false);
+        for (Job job : sickEmployee.getListOfJobs()) {
+            this.addJob(job.getTypeOfJob(), job.getDuration(), job.getId());
+            if (sickEmployee.getListOfJobs().isEmpty()) {
+                return;
+            }
         }
     }
 
