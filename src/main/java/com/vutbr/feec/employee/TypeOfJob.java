@@ -1,5 +1,5 @@
 package com.vutbr.feec.employee;
 
-public enum Job {
+public enum TypeOfJob {
     ADMINISTRATIVE_JOB, TECHNICAL_JOB, DESIGN_JOB
 }

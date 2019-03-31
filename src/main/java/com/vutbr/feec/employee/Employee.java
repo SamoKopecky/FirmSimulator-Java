@@ -1,17 +1,25 @@
 package com.vutbr.feec.employee;
 
+import com.vutbr.feec.firm.Job;
+
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public abstract class Employee {
     private static int idCounter = 0;
-    protected int id;
-    protected String firstName;
-    protected String secondName;
-    protected Set<Job> setOfJobs;
+    private int id;
+    private String firstName;
+    private String secondName;
+    int tariff;
+    private int contractLength = 271560;
+    private List<Job> listOfJobs;
+    Set<TypeOfJob> canDoTypeOfJobs;
 
     public Employee(String firstName, String secondName) {
-        setOfJobs = new HashSet<>();
+        listOfJobs = new ArrayList<>();
+        canDoTypeOfJobs = new HashSet<>();
         this.id = idCounter;
         idCounter++;
         this.firstName = firstName;
@@ -20,6 +28,18 @@ public abstract class Employee {
 
     public void decrementId() {
         idCounter--;
+    }
+
+    public Set<TypeOfJob> getCanDoTypeOfJobs() {
+        return canDoTypeOfJobs;
+    }
+
+    public int getTariff() {
+        return tariff;
+    }
+
+    public List<Job> getListOfJobs() {
+        return listOfJobs;
     }
 
     @Override
