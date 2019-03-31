@@ -41,8 +41,22 @@ public class Firm {
         }
     }
 
-    public void addJob(TypeOfJob typeOfJob, int duration) {
+    public void addJob(TypeOfJob typeOfJob, int duration, int id) {
+        for (Job job : listOfJobs) {
+            if (job.getId() == id) {
+                for (Employee employee : listOfEmployees) {
+                    employee.removeJob(job);
+                }
+                listOfJobs.remove(job);
+                break;
+            }
+        }
+
+        int tariff = 0;
+        List<Employee> workingEmployees = new ArrayList<>();
         List<Employee> capableEmployees = new ArrayList<>();
+        int maxWork = 0;
+
         for (Employee employee : listOfEmployees) {
             if (employee.getCanDoTypeOfJobs().contains(typeOfJob)) {
                 capableEmployees.add(employee);
@@ -54,15 +68,6 @@ public class Firm {
                 return o1.getTariff() - o2.getTariff();
             }
         });
-
-        splitWork(capableEmployees, duration, typeOfJob);
-
-    }
-
-    private void splitWork(List<Employee> capableEmployees, int duration, TypeOfJob typeOfJob) {
-        int tariff = 0;
-        List<Employee> workingEmployees = new ArrayList<>();
-        int maxWork = 0;
 
         for (Employee employee : capableEmployees) {
             int size = employee.getListOfJobs().size();
@@ -89,14 +94,21 @@ public class Firm {
         for (Employee employee : workingEmployees) {
             employee.getListOfJobs().add(job);
         }
+
     }
 
     public void doJob(int index, int duration) {
-        int temp = listOfJobs.get(index).doJob(duration);
-        if (temp < 0) {
+        if (listOfJobs.get(index).doJob(duration) < 0) {
             listOfJobs.remove(index);
         }
-        System.out.println(temp);
+    }
+
+    public void removeEmployee(int id) {
+        Employee employeeToRemove = listOfEmployees.get(id);
+        listOfEmployees.remove(id);
+        for (Job job : employeeToRemove.getListOfJobs()) {
+            this.addJob(job.getTypeOfJob(), job.getDuration(), job.getId());
+        }
     }
 
     public List<Employee> getListOfEmployees() {

@@ -3,44 +3,28 @@ package com.vutbr.feec.main;
 import com.vutbr.feec.employee.Employee;
 import com.vutbr.feec.employee.TypeOfJob;
 import com.vutbr.feec.firm.Firm;
+import com.vutbr.feec.firm.Job;
 
 public class App {
     public static void main(String[] args) {
         Firm firm = new Firm();
 
         firm.addEmployee("Peter", "Kopecky", "Assistant");
-        /*firm.addEmployee("Peter", "Kopecky", "Assistant");
-        firm.addEmployee("Peter", "Kopecky", "Assistant");
-        firm.addEmployee("Peter", "Kopecky", "Assistant");*/
-        /*        firm.addEmployee("Peter", "Kopecky", "Designer");*/
-
-        /*firm.addEmployee("Peter", "Kopecky", "Technician");*/
+        firm.addEmployee("Peter", "Kopecky", "Designer");
         firm.addEmployee("Peter", "Kopecky", "Technician");
         firm.addEmployee("Peter", "Kopecky", "CEO");
         firm.addEmployee("Peter", "Kopecky", "Assistant");
+        firm.addEmployee("Peter", "Kopecky", "Assistant");
 
 
-        firm.addJob(TypeOfJob.ADMINISTRATIVE_JOB, 6);
-
-        /*for (Employee employee : firm.getListOfEmployees()) {
-            if (!employee.getListOfJobs().isEmpty()) {
-                System.out.println(employee.getListOfJobs().get(0).getDuration());
-            }
-        }*/
-        //System.out.println(firm.getListOfEmployees());
-        for (Employee employee : firm.getListOfEmployees()) {
-            System.out.println(employee.getListOfJobs());
+        firm.addJob(TypeOfJob.ADMINISTRATIVE_JOB, 6, firm.getListOfJobs().size());
+        for (Job job : firm.getListOfJobs()) {
+            System.out.println(job);
         }
-        for (Employee e : firm.getListOfJobs().get(0).getWorkingEmployees())
-            System.out.println(e);
-        System.out.println(firm.getListOfJobs().get(0).getWorkEfficiency());
-        firm.doJob(0, 1);
-        System.out.println(firm.getListOfJobs().size());
-        for (Employee employee : firm.getListOfEmployees()) {
-            System.out.println(employee.getListOfJobs());
+        firm.removeEmployee(0);
+        for (Job job : firm.getListOfJobs()) {
+            System.out.println(job);
         }
-        System.out.println(firm.getListOfEmployees().get(1).action(TypeOfJob.TECHNICAL_JOB,
-                firm.getListOfEmployees().get(0)));
 
     }
 }

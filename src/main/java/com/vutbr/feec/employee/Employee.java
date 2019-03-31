@@ -75,6 +75,15 @@ public abstract class Employee {
         }
     }
 
+    public void removeJob(Job jobToRemove) {
+        for (Job job : listOfJobs) {
+            if (job.equals(jobToRemove)) {
+                listOfJobs.remove(jobToRemove);
+                break;
+            }
+        }
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o instanceof Employee) {
@@ -93,11 +102,11 @@ public abstract class Employee {
 
     @Override
     public String toString() {
-        return "Employee{" +
+        return "\nEmployee{" +
                 "id=" + id +
                 ", firstName='" + firstName + '\'' +
                 ", secondName='" + secondName + '\'' +
                 ", class='" + this.getClass().getSimpleName() + '\'' +
-                "}\n";
+                "}";
     }
 }

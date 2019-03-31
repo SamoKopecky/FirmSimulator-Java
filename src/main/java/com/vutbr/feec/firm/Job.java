@@ -56,6 +56,14 @@ public class Job {
         return this.duration <= 0;
     }
 
+    public TypeOfJob getTypeOfJob() {
+        return typeOfJob;
+    }
+
+    public int getId() {
+        return id;
+    }
+
     public int getDuration() {
         return duration;
     }
@@ -66,5 +74,16 @@ public class Job {
 
     public int getWorkEfficiency() {
         return workEfficiency;
+    }
+
+    @Override
+    public String toString() {
+        return "Job{" +
+                "duration=" + duration +
+                ", typeOfJob=" + typeOfJob +
+                ", workEfficiency=" + workEfficiency +
+                ", id=" + id +
+                ", workingEmployees=" + workingEmployees +
+                '}';
     }
 }
