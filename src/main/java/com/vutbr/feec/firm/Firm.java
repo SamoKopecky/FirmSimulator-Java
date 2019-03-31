@@ -41,13 +41,6 @@ public class Firm {
         }
     }
 
-    public void doJob(int index, int duration) {
-        int temp = listOfJobs.get(index).doJob(duration);
-        if (temp < 0) {
-            listOfJobs.remove(index);
-        }
-    }
-
     public void addJob(TypeOfJob typeOfJob, int duration) {
         List<Employee> capableEmployees = new ArrayList<>();
         for (Employee employee : listOfEmployees) {
@@ -96,6 +89,14 @@ public class Firm {
         for (Employee employee : workingEmployees) {
             employee.getListOfJobs().add(job);
         }
+    }
+
+    public void doJob(int index, int duration) {
+        int temp = listOfJobs.get(index).doJob(duration);
+        if (temp < 0) {
+            listOfJobs.remove(index);
+        }
+        System.out.println(temp);
     }
 
     public List<Employee> getListOfEmployees() {

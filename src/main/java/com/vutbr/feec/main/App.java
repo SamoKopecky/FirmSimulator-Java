@@ -18,9 +18,9 @@ public class App {
         firm.addEmployee("Peter", "Kopecky", "Technician");
         firm.addEmployee("Peter", "Kopecky", "CEO");
         firm.addEmployee("Peter", "Kopecky", "Assistant");
-        firm.addEmployee("Peter", "Kopecky", "Assistant");
 
-        firm.addJob(TypeOfJob.ADMINISTRATIVE_JOB, 3);
+
+        firm.addJob(TypeOfJob.ADMINISTRATIVE_JOB, 6);
 
         /*for (Employee employee : firm.getListOfEmployees()) {
             if (!employee.getListOfJobs().isEmpty()) {
@@ -39,5 +39,6 @@ public class App {
         for (Employee employee : firm.getListOfEmployees()) {
             System.out.println(employee.getListOfJobs());
         }
+
     }
 }

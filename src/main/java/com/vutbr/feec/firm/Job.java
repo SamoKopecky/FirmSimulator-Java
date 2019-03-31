@@ -23,15 +23,19 @@ public class Job {
     }
 
     public int doJob(int duration) {
-        int workDonePerPerson = this.duration;
-        if(this.duration - duration > 0) {
-            workDonePerPerson = duration * workEfficiency;
+        int workDonePerPerson;
+        int workDone = duration * workEfficiency;
+        if(this.duration - workDone <= 0) {
+            workDonePerPerson = this.duration / workEfficiency;
+            this.duration -= workDone;
+        } else {
+            workDonePerPerson = duration;
+            this.duration -= duration * workEfficiency;
         }
-        this.duration -= duration * workEfficiency;
 
         int moneyUsed = 0;
         for (Employee employee : workingEmployees) {
-            moneyUsed += (int) ((double)employee.getTariff() * ((double) workDonePerPerson / (double)workEfficiency));
+            moneyUsed += (int) (employee.getTariff() * (double) workDonePerPerson);
             if (this.duration <= 0) {
                 employee.getListOfJobs().remove(this);
             }
@@ -41,6 +45,15 @@ public class Job {
             moneyUsed = -moneyUsed;
         }
         return moneyUsed;
+    }
+
+    public boolean decreseJobDuration(int duration) {
+        this.duration -= duration;
+        return this.duration <= 0;
+    }
+
+    public int getDuration() {
+        return duration;
     }
 
     public List<Employee> getWorkingEmployees() {
