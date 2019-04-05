@@ -50,7 +50,7 @@ public class Firm implements Serializable {
         return expenses;
     }
 
-    public void addJob(TypeOfJob typeOfJob, int duration, Job jobToReplace) {
+    public boolean addJob(TypeOfJob typeOfJob, int duration, Job jobToReplace) {
         if (jobToReplace != null) {
             for (Job job : listOfJobs) {
                 if (job.equals(jobToReplace)) {
@@ -62,7 +62,6 @@ public class Firm implements Serializable {
                 }
             }
         }
-
 
         int tariff = 0;
         int maxWork = 0;
@@ -101,7 +100,22 @@ public class Firm implements Serializable {
                 }
             }
         }
+        /*
+           TODO vydelit poctom kolegou na praci, alebo to dat do novej metody to job triedy
+           TODO triedenie podla id alebo mena pri vypise
+           TODO zadavat hodiny alebo mesiac
+           TODO databaza
+           TODO Jednotkovy test
+         */
+        for (Employee employee : workingEmployees) {
+            if (employee.getWorkingHours() + duration > employee.getContractLength()) {
+                workingEmployees.remove(employee);
+            }
+        }
 
+        if (workingEmployees.isEmpty()) {
+            return false;
+        }
 
         if (jobToReplace != null) {
             job = new Job(duration, typeOfJob, workingEmployees, jobToReplace.getId());
@@ -113,7 +127,7 @@ public class Firm implements Serializable {
         for (Employee employee : workingEmployees) {
             employee.getListOfJobs().add(job);
         }
-
+        return true;
     }
 
     /*public void doJob(int index, int duration) {

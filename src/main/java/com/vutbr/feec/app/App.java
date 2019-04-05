@@ -1,4 +1,4 @@
-package com.vutbr.feec.main;
+package com.vutbr.feec.app;
 
 import com.vutbr.feec.console_interface.ConsoleInterface;
 import com.vutbr.feec.employee.EmployeeType;

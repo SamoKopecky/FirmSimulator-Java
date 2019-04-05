@@ -22,7 +22,6 @@ public abstract class Employee implements Serializable {
     private boolean active;
 
     public Employee(String firstName, String secondName) {
-        if (this instanceof CEO) contractLength = Integer.MAX_VALUE;
         active = true;
         listOfJobs = new ArrayList<>();
         canDoTypeOfJobs = new HashSet<>();
@@ -30,6 +29,14 @@ public abstract class Employee implements Serializable {
         idCounter++;
         this.firstName = firstName;
         this.secondName = secondName;
+    }
+
+    public int getWorkingHours() {
+        int temp = 0;
+        for (Job job : listOfJobs) {
+            temp += job.getDuration();
+        }
+        return temp;
     }
 
     public void decrementId() {
@@ -48,15 +55,12 @@ public abstract class Employee implements Serializable {
         return listOfJobs;
     }
 
-    public boolean setMonthlyJobDuration(int contractLength) {
+    public void setMonthlyJobDuration(int contractLength) {
         if (!(this instanceof CEO)) {
             this.contractLength = contractLength;
             if (this.contractLength <= 0) {
                 active = false;
             }
-            return true;
-        } else {
-            return false;
         }
     }
 
@@ -92,7 +96,7 @@ public abstract class Employee implements Serializable {
         if (canDoTypeOfJobs.contains(typeOfJob) && active) {
             return typeOfJob.action(employee);
         } else {
-            return "nema tuto pracu";
+            return "Nemoze vykonat pracu lebo je chory";
         }
     }
 

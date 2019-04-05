@@ -62,9 +62,14 @@ public class ConsoleInterface {
             case ADD_JOB:
                 jobTypeMap.forEach((key, value) -> System.out.println(key + " : " + value));
                 TypeOfJob jobType = jobTypeMap.get(sc.nextLine().toUpperCase().charAt(0));
+
                 System.out.print("dlzka prace : ");
                 int duration = sc.nextLine().charAt(0);
-                firm.addJob(jobType, duration, null);
+                boolean wasAddingSuccessful;
+                wasAddingSuccessful = firm.addJob(jobType, duration, null);
+                if (!wasAddingSuccessful) {
+                    System.out.println("Nepodarilo sa rozdelit pracu");
+                }
                 break;
             case DB_EXPORT:
                 database.dbExport(null, null);
