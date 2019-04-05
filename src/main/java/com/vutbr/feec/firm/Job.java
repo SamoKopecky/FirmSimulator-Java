@@ -1,26 +1,33 @@
 package com.vutbr.feec.firm;
 
 import com.vutbr.feec.employee.Employee;
-import com.vutbr.feec.employee.TypeOfJob;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Job {
+public class Job implements Serializable {
     private int duration;
     private TypeOfJob typeOfJob;
-    private int workEfficiency;
     private int id;
+    private static int idCounter = 0;
     private List<Employee> workingEmployees;
 
-    Job(int duration, TypeOfJob typeOfJob, int workEfficiency, List<Employee> workingEmployees, int id) {
+    Job(int duration, TypeOfJob typeOfJob, List<Employee> workingEmployees, int id) {
         this.workingEmployees = workingEmployees;
         this.id = id;
         this.duration = duration;
         this.typeOfJob = typeOfJob;
-        this.workEfficiency = workEfficiency;
     }
 
-    public int doJob(int duration) {
+    Job(int duration, TypeOfJob typeOfJob, List<Employee> workingEmployees) {
+        this.workingEmployees = workingEmployees;
+        this.id = idCounter;
+        idCounter++;
+        this.duration = duration;
+        this.typeOfJob = typeOfJob;
+    }
+
+    /*public int doJob(int duration) {
         int workDonePerPerson;
         int workDone = duration * workEfficiency;
         if(this.duration - workDone <= 0) {
@@ -46,12 +53,11 @@ public class Job {
         if (this.duration <= 0) {
             moneyUsed = -moneyUsed;
         }
-        return moneyUsed;
-    }
+        return moneyUsed;*/
+    //}
 
-    public boolean decreseJobDuration(int duration) {
+    public void decreaseJobDuration(int duration) {
         this.duration -= duration;
-        return this.duration <= 0;
     }
 
     public TypeOfJob getTypeOfJob() {
@@ -70,16 +76,11 @@ public class Job {
         return workingEmployees;
     }
 
-    public int getWorkEfficiency() {
-        return workEfficiency;
-    }
-
     @Override
     public String toString() {
         return "Job{" +
                 "duration=" + duration +
                 ", typeOfJob=" + typeOfJob +
-                ", workEfficiency=" + workEfficiency +
                 ", id=" + id +
                 ", workingEmployees=" + workingEmployees +
                 '}';

@@ -2,11 +2,12 @@ package com.vutbr.feec.firm;
 
 import com.vutbr.feec.employee.*;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-public class Firm {
+public class Firm implements Serializable {
     private List<Employee> listOfEmployees;
     private List<Job> listOfJobs;
 
@@ -17,16 +18,16 @@ public class Firm {
 
     public boolean addEmployee(String firstName, String secondName, String position) {
         switch (position) {
-            case "Assistant":
+            case "assistant":
                 listOfEmployees.add(new Assistant(firstName, secondName));
                 return true;
-            case "Designer":
+            case "designer":
                 listOfEmployees.add(new Designer(firstName, secondName));
                 return true;
-            case "Technician":
+            case "technician":
                 listOfEmployees.add(new Technician(firstName, secondName));
                 return true;
-            case "CEO":
+            case "ceo":
                 Employee employee = new CEO(firstName, secondName);
                 if (!listOfEmployees.contains(employee)) {
                     listOfEmployees.add(employee);
@@ -41,21 +42,29 @@ public class Firm {
         }
     }
 
-    public void addJob(TypeOfJob typeOfJob, int duration, int id) {
-        for (Job job : listOfJobs) {
-            if (job.getId() == id) {
-                for (Employee employee : listOfEmployees) {
-                    employee.removeJob(job);
+    public int getMonthlyExpenses() {
+        return 5;
+    }
+
+    public void addJob(TypeOfJob typeOfJob, int duration, Job jobToReplace) {
+        if (jobToReplace != null) {
+            for (Job job : listOfJobs) {
+                if (job.equals(jobToReplace)) {
+                    for (Employee employee : listOfEmployees) {
+                        employee.removeJob(job);
+                    }
+                    listOfJobs.remove(job);
+                    break;
                 }
-                listOfJobs.remove(job);
-                break;
             }
         }
+
 
         int tariff = 0;
         int maxWork = 0;
         List<Employee> workingEmployees = new ArrayList<>();
         List<Employee> capableEmployees = new ArrayList<>();
+        Job job;
 
         for (Employee employee : listOfEmployees) {
             if (employee.getCanDoTypeOfJobs().contains(typeOfJob) && employee.isActive()) {
@@ -89,7 +98,13 @@ public class Firm {
             }
         }
 
-        Job job = new Job(duration, typeOfJob, workingEmployees.size(), workingEmployees, id);
+
+        if (jobToReplace != null) {
+            job = new Job(duration, typeOfJob, workingEmployees, jobToReplace.getId());
+        } else {
+            job = new Job(duration, typeOfJob, workingEmployees);
+        }
+
         listOfJobs.add(job);
         for (Employee employee : workingEmployees) {
             employee.getListOfJobs().add(job);
@@ -97,17 +112,17 @@ public class Firm {
 
     }
 
-    public void doJob(int index, int duration) {
+    /*public void doJob(int index, int duration) {
         if (listOfJobs.get(index).doJob(duration) < 0) {
             listOfJobs.remove(index);
         }
-    }
+    }*/
 
     public void removeEmployee(int id) {
         Employee employeeToRemove = listOfEmployees.get(id);
         listOfEmployees.remove(id);
         for (Job job : employeeToRemove.getListOfJobs()) {
-            this.addJob(job.getTypeOfJob(), job.getDuration(), job.getId());
+            this.addJob(job.getTypeOfJob(), job.getDuration(), job);
             if (employeeToRemove.getListOfJobs().isEmpty()) {
                 return;
             }
@@ -118,7 +133,7 @@ public class Firm {
         Employee sickEmployee = listOfEmployees.get(id);
         sickEmployee.setActive(false);
         for (Job job : sickEmployee.getListOfJobs()) {
-            this.addJob(job.getTypeOfJob(), job.getDuration(), job.getId());
+            this.addJob(job.getTypeOfJob(), job.getDuration(), job);
             if (sickEmployee.getListOfJobs().isEmpty()) {
                 return;
             }

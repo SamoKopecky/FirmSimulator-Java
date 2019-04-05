@@ -1,4 +1,6 @@
-package com.vutbr.feec.employee;
+package com.vutbr.feec.firm;
+
+import com.vutbr.feec.employee.Employee;
 
 public enum TypeOfJob {
     ADMINISTRATIVE_JOB, TECHNICAL_JOB, DESIGN_JOB;

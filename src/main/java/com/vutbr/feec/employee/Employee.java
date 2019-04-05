@@ -1,17 +1,20 @@
 package com.vutbr.feec.employee;
 
 import com.vutbr.feec.firm.Job;
+import com.vutbr.feec.firm.TypeOfJob;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public abstract class Employee {
+public abstract class Employee implements Serializable {
     private static int idCounter = 0;
     private int id;
     private String firstName;
     private String secondName;
+    EmployeeType employeeType;
     int tariff;
     private int contractLength = 271560;
     private List<Job> listOfJobs;
@@ -19,6 +22,7 @@ public abstract class Employee {
     private boolean active;
 
     public Employee(String firstName, String secondName) {
+        if (this instanceof CEO) contractLength = Integer.MAX_VALUE;
         active = true;
         listOfJobs = new ArrayList<>();
         canDoTypeOfJobs = new HashSet<>();
@@ -61,6 +65,22 @@ public abstract class Employee {
         } else {
             return false;
         }
+    }
+
+    public EmployeeType getEmployeeType() {
+        return employeeType;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getSecondName() {
+        return secondName;
+    }
+
+    public int getContractLength() {
+        return contractLength;
     }
 
     public String getFirstName() {

@@ -5,3 +5,5 @@ target/
 current_map.xml
 path_taken.txt
 *.sh
+*.dat
+*.txt
