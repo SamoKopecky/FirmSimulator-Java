@@ -16,7 +16,7 @@ public abstract class Employee implements Serializable {
     private String secondName;
     EmployeeType employeeType;
     int tariff;
-    private int contractLength = 271560;
+    private int contractLength = 20;
     private List<Job> listOfJobs;
     Set<TypeOfJob> canDoTypeOfJobs;
     private boolean active;
@@ -48,14 +48,7 @@ public abstract class Employee implements Serializable {
         return listOfJobs;
     }
 
-    public void decreaseContractLength(int length) {
-        contractLength -= length;
-        if (contractLength <= 0) {
-            active = false;
-        }
-    }
-
-    public boolean setContractLength(int contractLength) {
+    public boolean setMonthlyJobDuration(int contractLength) {
         if (!(this instanceof CEO)) {
             this.contractLength = contractLength;
             if (this.contractLength <= 0) {

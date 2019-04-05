@@ -16,18 +16,18 @@ public class Firm implements Serializable {
         listOfEmployees = new ArrayList<>();
     }
 
-    public boolean addEmployee(String firstName, String secondName, String position) {
-        switch (position) {
-            case "assistant":
+    public boolean addEmployee(String firstName, String secondName, EmployeeType employeeType) {
+        switch (employeeType) {
+            case ASSISTANT:
                 listOfEmployees.add(new Assistant(firstName, secondName));
                 return true;
-            case "designer":
+            case DESIGNER:
                 listOfEmployees.add(new Designer(firstName, secondName));
                 return true;
-            case "technician":
+            case TECHNICIAN:
                 listOfEmployees.add(new Technician(firstName, secondName));
                 return true;
-            case "ceo":
+            case CEO:
                 Employee employee = new CEO(firstName, secondName);
                 if (!listOfEmployees.contains(employee)) {
                     listOfEmployees.add(employee);
@@ -43,7 +43,11 @@ public class Firm implements Serializable {
     }
 
     public int getMonthlyExpenses() {
-        return 5;
+        int expenses = 0;
+        for (Job job : listOfJobs) {
+            expenses += job.getDuration() * job.getWorkingEmployees().get(0).getTariff();
+        }
+        return expenses;
     }
 
     public void addJob(TypeOfJob typeOfJob, int duration, Job jobToReplace) {

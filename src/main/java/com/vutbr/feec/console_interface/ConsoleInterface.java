@@ -12,7 +12,7 @@ import java.util.*;
 public class ConsoleInterface {
     private Database database = new Database();
     private Firm firm;
-    private final char[] ALPHABET = "abcdefghijklmnopqrstuvwxyz".toUpperCase().toCharArray();
+    private final char[] ALPHABET;
     private Map<Character, Option> options;
     private Map<Character, EmployeeType> employeeTypeMap;
     private Map<Character, TypeOfJob> jobTypeMap;
@@ -20,6 +20,7 @@ public class ConsoleInterface {
     private Option option;
 
     public ConsoleInterface(Firm firm) {
+        ALPHABET = "abcdefghijklmnopqrstuvwxyz".toUpperCase().toCharArray();
         this.firm = firm;
         options = new HashMap<>();
         employeeTypeMap = new HashMap<>();
@@ -56,7 +57,7 @@ public class ConsoleInterface {
                 System.out.print("pozicia : \n");
                 employeeTypeMap.forEach((key, value) -> System.out.println(key + " : " + value));
                 EmployeeType employeeType = employeeTypeMap.get(sc.nextLine().toUpperCase().charAt(0));
-                firm.addEmployee(firstName, secondName, employeeType.toString().toLowerCase());
+                firm.addEmployee(firstName, secondName, employeeType);
                 break;
             case ADD_JOB:
                 jobTypeMap.forEach((key, value) -> System.out.println(key + " : " + value));
@@ -149,7 +150,7 @@ public class ConsoleInterface {
                 System.out.println("Zadaj pocet hodin noveho uvazku : ");
                 duration = sc.nextInt();
                 sc.nextLine();
-                firm.getListOfEmployees().get(id).setContractLength(duration);
+                firm.getListOfEmployees().get(id).setMonthlyJobDuration(duration);
                 break;
             case PRINT_MONTHLY_EXPENSES:
                 System.out.println(firm.getMonthlyExpenses());
