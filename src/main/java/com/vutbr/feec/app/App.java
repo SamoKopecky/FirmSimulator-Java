@@ -1,9 +1,7 @@
 package com.vutbr.feec.app;
 
 import com.vutbr.feec.console_interface.ConsoleInterface;
-import com.vutbr.feec.employee.Employee;
 import com.vutbr.feec.employee.EmployeeType;
-import com.vutbr.feec.firm.JobType;
 import com.vutbr.feec.firm.Firm;
 
 public class App {
@@ -15,9 +13,6 @@ public class App {
         firm.addEmployee("Peter", "Dopecky", EmployeeType.CEO);
         firm.addEmployee("Peter", "eopecky", EmployeeType.ASSISTANT);
         firm.addEmployee("Peter", "Eopecky", EmployeeType.ASSISTANT);
-        for (Employee employee : firm.getListOfEmployees()) {
-            employee.setMonthlyJobDuration(1);
-        }
         //firm.addJob(JobType.ADMINISTRATIVE_JOB, 6, null);
         ConsoleInterface consoleInterface = new ConsoleInterface(firm);
         consoleInterface.mainLoop();

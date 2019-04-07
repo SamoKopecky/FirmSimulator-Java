@@ -97,10 +97,6 @@ public class Firm implements Serializable {
                 }
             }
         }
-        /*
-           TODO databaza
-           TODO Jednotkovy test
-         */
         for (Employee employee : workingEmployees) {
             employee.setTested(true);
         }
@@ -134,12 +130,6 @@ public class Firm implements Serializable {
             workingEmployees.remove(employee);
         }
     }
-
-    /*public void doJob(int index, int duration) {
-        if (listOfJobs.get(index).doJob(duration) < 0) {
-            listOfJobs.remove(index);
-        }
-    }*/
 
     public boolean removeEmployee(int id) {
         Employee employeeToRemove = listOfEmployees.get(id);

@@ -2,7 +2,9 @@ package com.vutbr.feec.firm;
 
 import com.vutbr.feec.employee.Employee;
 
-public enum JobType {
+import java.io.Serializable;
+
+public enum JobType implements Serializable {
     ADMINISTRATIVE_JOB, TECHNICAL_JOB, DESIGN_JOB;
 
     public String action(Employee employee) {

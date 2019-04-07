@@ -1,5 +1,7 @@
 package com.vutbr.feec.employee;
 
-public enum EmployeeType {
+import java.io.Serializable;
+
+public enum EmployeeType implements Serializable {
     ASSISTANT, CEO, DESIGNER, TECHNICIAN
 }

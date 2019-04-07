@@ -27,35 +27,6 @@ public class Job implements Serializable {
         this.jobType = jobType;
     }
 
-    /*public int doJob(int duration) {
-        int workDonePerPerson;
-        int workDone = duration * workEfficiency;
-        if(this.duration - workDone <= 0) {
-            workDonePerPerson = this.duration / workEfficiency;
-            this.duration -= workDone;
-        } else {
-            workDonePerPerson = duration;
-            this.duration -= duration * workEfficiency;
-        }
-
-        for (Employee employee : workingEmployees) {
-            employee.decreaseContractLength(workDonePerPerson);
-        }
-
-        int moneyUsed = 0;
-        for (Employee employee : workingEmployees) {
-            moneyUsed += (int) (employee.getTariff() * (double) workDonePerPerson);
-            if (this.duration <= 0) {
-                employee.getListOfJobs().remove(this);
-            }
-        }
-
-        if (this.duration <= 0) {
-            moneyUsed = -moneyUsed;
-        }
-        return moneyUsed;*/
-    //}
-
     public void decreaseJobDuration(int duration) {
         this.duration -= duration;
     }
@@ -72,7 +43,7 @@ public class Job implements Serializable {
         return duration;
     }
 
-    public List<Employee> getWorkingEmployees() {
+    List<Employee> getWorkingEmployees() {
         return workingEmployees;
     }
 

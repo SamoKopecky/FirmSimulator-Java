@@ -6,6 +6,7 @@ import com.vutbr.feec.employee.EmployeeType;
 import com.vutbr.feec.firm.JobType;
 import com.vutbr.feec.firm.Firm;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
@@ -73,9 +74,11 @@ public class ConsoleInterface {
                 }
                 break;
             case DB_EXPORT:
-                database.dbExport(null, null);
+                database.dbExport(firm, new File("test"));
+                break;
             case DB_IMPORT:
-                database.dbImport();
+                firm = database.dbImport(new File("test"));
+                break;
             case PRINT_JOBS:
                 for (EmployeeType type : EmployeeType.values()) {
                     System.out.println(type + ":");

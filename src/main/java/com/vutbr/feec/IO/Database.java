@@ -6,8 +6,18 @@ import java.io.*;
 import java.util.Arrays;
 
 public class Database {
-    public void dbImport() {
-
+    public Firm dbImport(File file) {
+        Firm firm = new Firm();
+        try {
+            FileInputStream fis = new FileInputStream(file);
+            ObjectInputStream ois = new ObjectInputStream(fis);
+            firm = (Firm) ois.readObject();
+            fis.close();
+            ois.close();
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println("can't find file or can't write to object" + Arrays.toString(e.getStackTrace()));
+        }
+        return firm;
     }
 
     public void dbExport(Firm firm, File file) {
