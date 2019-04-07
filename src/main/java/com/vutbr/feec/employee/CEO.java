@@ -1,6 +1,6 @@
 package com.vutbr.feec.employee;
 
-import com.vutbr.feec.firm.TypeOfJob;
+import com.vutbr.feec.firm.JobType;
 
 public class CEO extends Employee{
 
@@ -9,9 +9,9 @@ public class CEO extends Employee{
     public CEO(String firstName, String secondName) {
         super(firstName, secondName);
         employeeType = EmployeeType.CEO;
-        canDoTypeOfJobs.add(TypeOfJob.ADMINISTRATIVE_JOB);
-        canDoTypeOfJobs.add(TypeOfJob.DESIGN_JOB);
-        canDoTypeOfJobs.add(TypeOfJob.TECHNICAL_JOB);
+        canDoTypeOfJobs.add(JobType.ADMINISTRATIVE_JOB);
+        canDoTypeOfJobs.add(JobType.DESIGN_JOB);
+        canDoTypeOfJobs.add(JobType.TECHNICAL_JOB);
         this.tariff = TARIFF;
     }
 }

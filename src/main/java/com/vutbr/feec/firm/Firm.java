@@ -50,7 +50,7 @@ public class Firm implements Serializable {
         return expenses;
     }
 
-    public boolean addJob(TypeOfJob typeOfJob, int duration, Job jobToReplace) {
+    public boolean addJob(JobType jobType, int duration, Job jobToReplace) {
         if (jobToReplace != null) {
             for (Job job : listOfJobs) {
                 if (job.equals(jobToReplace)) {
@@ -70,7 +70,7 @@ public class Firm implements Serializable {
         Job job;
 
         for (Employee employee : listOfEmployees) {
-            if (employee.getCanDoTypeOfJobs().contains(typeOfJob) && employee.isActive()) {
+            if (employee.getCanDoTypeOfJobs().contains(jobType) && employee.isActive()) {
                 capableEmployees.add(employee);
             }
         }
@@ -98,11 +98,9 @@ public class Firm implements Serializable {
         }
         /*
            TODO vydelit poctom kolegou na praci, alebo to dat do novej metody to job triedy
-           TODO triedenie podla id alebo mena pri vypise
            TODO zadavat hodiny alebo mesiac
            TODO databaza
            TODO Jednotkovy test
-           TODO activation
          */
 
         removeOverworkedEmployees(duration, workingEmployees);
@@ -113,9 +111,9 @@ public class Firm implements Serializable {
         }
 
         if (jobToReplace != null) {
-            job = new Job(duration, typeOfJob, workingEmployees, jobToReplace.getId());
+            job = new Job(duration, jobType, workingEmployees, jobToReplace.getId());
         } else {
-            job = new Job(duration, typeOfJob, workingEmployees);
+            job = new Job(duration, jobType, workingEmployees);
         }
 
         listOfJobs.add(job);
@@ -148,7 +146,7 @@ public class Firm implements Serializable {
         listOfEmployees.remove(id);
         boolean toReturn = true;
         for (Job job : employeeToRemove.getListOfJobs()) {
-            toReturn = this.addJob(job.getTypeOfJob(), job.getDuration(), job);
+            toReturn = this.addJob(job.getJobType(), job.getDuration(), job);
             if (employeeToRemove.getListOfJobs().isEmpty()) {
                 break;
             }
@@ -161,7 +159,7 @@ public class Firm implements Serializable {
         sickEmployee.setActive(false);
         boolean toReturn = true;
         for (Job job : sickEmployee.getListOfJobs()) {
-            toReturn = this.addJob(job.getTypeOfJob(), job.getDuration(), job);
+            toReturn = this.addJob(job.getJobType(), job.getDuration(), job);
             if (sickEmployee.getListOfJobs().isEmpty()) {
                 break;
             }

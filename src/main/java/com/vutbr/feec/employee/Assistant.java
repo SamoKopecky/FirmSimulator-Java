@@ -1,6 +1,6 @@
 package com.vutbr.feec.employee;
 
-import com.vutbr.feec.firm.TypeOfJob;
+import com.vutbr.feec.firm.JobType;
 
 public class Assistant extends Employee {
 
@@ -9,7 +9,7 @@ public class Assistant extends Employee {
     public Assistant(String firstName, String secondName) {
         super(firstName, secondName);
         employeeType = EmployeeType.ASSISTANT;
-        canDoTypeOfJobs.add(TypeOfJob.ADMINISTRATIVE_JOB);
+        canDoTypeOfJobs.add(JobType.ADMINISTRATIVE_JOB);
         this.tariff = TARIFF;
     }
 }

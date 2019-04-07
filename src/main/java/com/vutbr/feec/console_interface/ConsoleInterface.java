@@ -3,8 +3,7 @@ package com.vutbr.feec.console_interface;
 import com.vutbr.feec.IO.Database;
 import com.vutbr.feec.employee.Employee;
 import com.vutbr.feec.employee.EmployeeType;
-import com.vutbr.feec.firm.Job;
-import com.vutbr.feec.firm.TypeOfJob;
+import com.vutbr.feec.firm.JobType;
 import com.vutbr.feec.firm.Firm;
 
 import java.io.IOException;
@@ -16,7 +15,7 @@ public class ConsoleInterface {
     private final char[] ALPHABET;
     private Map<Character, Option> options;
     private Map<Character, EmployeeType> employeeTypeMap;
-    private Map<Character, TypeOfJob> jobTypeMap;
+    private Map<Character, JobType> jobTypeMap;
     private Scanner sc = new Scanner(System.in);
     private Option option;
 
@@ -32,8 +31,8 @@ public class ConsoleInterface {
         for (int i = 0; i < Option.values().length; i++) {
             options.put(ALPHABET[i], Option.values()[i]);
         }
-        for (int i = 0; i < TypeOfJob.values().length; i++) {
-            jobTypeMap.put(ALPHABET[i], TypeOfJob.values()[i]);
+        for (int i = 0; i < JobType.values().length; i++) {
+            jobTypeMap.put(ALPHABET[i], JobType.values()[i]);
         }
     }
 
@@ -62,7 +61,7 @@ public class ConsoleInterface {
                 break;
             case ADD_JOB:
                 jobTypeMap.forEach((key, value) -> System.out.println(key + " : " + value));
-                TypeOfJob jobType = jobTypeMap.get(sc.nextLine().toUpperCase().charAt(0));
+                JobType jobType = jobTypeMap.get(sc.nextLine().toUpperCase().charAt(0));
 
                 System.out.print("dlzka prace : ");
                 int duration = sc.nextInt();
@@ -114,7 +113,6 @@ public class ConsoleInterface {
                     System.out.println("Zoradit podla (A)priezviska lebo (B)id ?");
                     option = sc.nextLine().toUpperCase().charAt(0);
                 } while (option != 'A' && option != 'B');
-
                 switch (option) {
                     case 'A':
                         firm.getListOfEmployees().sort(Comparator.comparing(Employee::getSecondName));
@@ -124,17 +122,10 @@ public class ConsoleInterface {
                         break;
                 }
                 for (Employee employee : firm.getListOfEmployees()) {
-                    System.out.print("\n\nID : " + employee.getId()
-                            + "\n meno : " + employee.getFirstName()
-                            + "\n priezvisko : " + employee.getSecondName()
-                            + "\n pozicia : " + employee.getEmployeeType() + "\nList prac : ");
-                    for (Job job : employee.getListOfJobs()) {
-                        System.out.print(" \nID : " + job.getId()
-                                + "\n  pocet hodin : " + job.getDuration()
-                                + "\n  typ prace : " + job.getTypeOfJob());
-                    }
+                    System.out.println(employee.toString());
                 }
                 sc.nextLine();
+                firm.getListOfEmployees().sort(Comparator.comparingInt(Employee::hashCode));
                 break;
             case HEALTHY_EMPLOYEE:
                 System.out.println("Zadaj ID : ");
@@ -148,7 +139,7 @@ public class ConsoleInterface {
                 sc.nextLine();
                 Employee employee = firm.getListOfEmployees().get(id);
 
-                for (Map.Entry<Character, TypeOfJob> map : jobTypeMap.entrySet()) {
+                for (Map.Entry<Character, JobType> map : jobTypeMap.entrySet()) {
                     if (employee.getCanDoTypeOfJobs().contains(map.getValue())) {
                         System.out.println(map.getKey() + " : " + map.getValue());
                     }

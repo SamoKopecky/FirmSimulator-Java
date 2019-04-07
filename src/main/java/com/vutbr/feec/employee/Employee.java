@@ -1,7 +1,7 @@
 package com.vutbr.feec.employee;
 
 import com.vutbr.feec.firm.Job;
-import com.vutbr.feec.firm.TypeOfJob;
+import com.vutbr.feec.firm.JobType;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -18,7 +18,7 @@ public abstract class Employee implements Serializable {
     int tariff;
     private int contractLength = 20;
     private List<Job> listOfJobs;
-    Set<TypeOfJob> canDoTypeOfJobs;
+    Set<JobType> canDoTypeOfJobs;
     private boolean active;
 
     public Employee(String firstName, String secondName) {
@@ -43,7 +43,7 @@ public abstract class Employee implements Serializable {
         idCounter--;
     }
 
-    public Set<TypeOfJob> getCanDoTypeOfJobs() {
+    public Set<JobType> getCanDoTypeOfJobs() {
         return canDoTypeOfJobs;
     }
 
@@ -92,9 +92,9 @@ public abstract class Employee implements Serializable {
         this.active = active;
     }
 
-    public String action(TypeOfJob typeOfJob, Employee employee) {
-        if (canDoTypeOfJobs.contains(typeOfJob) && active) {
-            return typeOfJob.action(employee);
+    public String action(JobType jobType, Employee employee) {
+        if (canDoTypeOfJobs.contains(jobType) && active) {
+            return jobType.action(employee);
         } else {
             return "Nemoze vykonat pracu lebo je chory";
         }
@@ -127,11 +127,15 @@ public abstract class Employee implements Serializable {
 
     @Override
     public String toString() {
-        return "\nEmployee{" +
-                "id=" + id +
-                ", firstName='" + firstName + '\'' +
-                ", secondName='" + secondName + '\'' +
-                ", class='" + this.getClass().getSimpleName() + '\'' +
-                "}";
+        String toReturn = "\n\nID : " + id
+                + "\n meno : " + firstName
+                + "\n priezvisko : " + secondName
+                + "\n pozicia : " + employeeType + "\nList prac : ";
+        for (Job job : listOfJobs) {
+            toReturn = toReturn.concat(" \nID : " + job.getId()
+                    + "\n  pocet hodin : " + job.getDuration()
+                    + "\n  typ prace : " + job.getJobType());
+        }
+        return toReturn;
     }
 }

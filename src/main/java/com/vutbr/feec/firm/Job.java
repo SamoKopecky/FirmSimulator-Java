@@ -7,24 +7,24 @@ import java.util.List;
 
 public class Job implements Serializable {
     private int duration;
-    private TypeOfJob typeOfJob;
+    private JobType jobType;
     private int id;
     private static int idCounter = 0;
     private List<Employee> workingEmployees;
 
-    Job(int duration, TypeOfJob typeOfJob, List<Employee> workingEmployees, int id) {
+    Job(int duration, JobType jobType, List<Employee> workingEmployees, int id) {
         this.workingEmployees = workingEmployees;
         this.id = id;
         this.duration = duration;
-        this.typeOfJob = typeOfJob;
+        this.jobType = jobType;
     }
 
-    Job(int duration, TypeOfJob typeOfJob, List<Employee> workingEmployees) {
+    Job(int duration, JobType jobType, List<Employee> workingEmployees) {
         this.workingEmployees = workingEmployees;
         this.id = idCounter;
         idCounter++;
         this.duration = duration;
-        this.typeOfJob = typeOfJob;
+        this.jobType = jobType;
     }
 
     /*public int doJob(int duration) {
@@ -60,8 +60,8 @@ public class Job implements Serializable {
         this.duration -= duration;
     }
 
-    public TypeOfJob getTypeOfJob() {
-        return typeOfJob;
+    public JobType getJobType() {
+        return jobType;
     }
 
     public int getId() {
@@ -80,7 +80,7 @@ public class Job implements Serializable {
     public String toString() {
         return "Job{" +
                 "duration=" + duration +
-                ", typeOfJob=" + typeOfJob +
+                ", jobType=" + jobType +
                 ", id=" + id +
                 ", workingEmployees=" + workingEmployees +
                 '}';
