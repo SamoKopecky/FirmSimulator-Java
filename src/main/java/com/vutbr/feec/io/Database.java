@@ -1,4 +1,4 @@
-package com.vutbr.feec.IO;
+package com.vutbr.feec.io;
 
 import com.vutbr.feec.firm.Firm;
 

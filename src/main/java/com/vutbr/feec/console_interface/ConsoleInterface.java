@@ -1,6 +1,6 @@
 package com.vutbr.feec.console_interface;
 
-import com.vutbr.feec.IO.Database;
+import com.vutbr.feec.io.Database;
 import com.vutbr.feec.employee.Employee;
 import com.vutbr.feec.employee.EmployeeType;
 import com.vutbr.feec.firm.JobType;
@@ -26,15 +26,17 @@ public class ConsoleInterface {
         options = new HashMap<>();
         employeeTypeMap = new HashMap<>();
         jobTypeMap = new HashMap<>();
-        for (int i = 0; i < EmployeeType.values().length; i++) {
-            employeeTypeMap.put(ALPHABET[i], EmployeeType.values()[i]);
+        options = generateMap(Option.values());
+        employeeTypeMap = generateMap(EmployeeType.values());
+        jobTypeMap = generateMap(JobType.values());
+    }
+
+    private <V> Map<Character, V> generateMap(V[] values) {
+        Map<Character, V> generatedMap = new HashMap<>();
+        for (int i = 0; i < values.length; i++) {
+            generatedMap.put(ALPHABET[i], values[i]);
         }
-        for (int i = 0; i < Option.values().length; i++) {
-            options.put(ALPHABET[i], Option.values()[i]);
-        }
-        for (int i = 0; i < JobType.values().length; i++) {
-            jobTypeMap.put(ALPHABET[i], JobType.values()[i]);
-        }
+        return generatedMap;
     }
 
     public void mainLoop() {
@@ -47,6 +49,7 @@ public class ConsoleInterface {
 
         }
     }
+
 
     private void chooseWhatToDoNext() {
         switch (option) {
@@ -63,15 +66,16 @@ public class ConsoleInterface {
             case ADD_JOB:
                 jobTypeMap.forEach((key, value) -> System.out.println(key + " : " + value));
                 JobType jobType = jobTypeMap.get(sc.nextLine().toUpperCase().charAt(0));
-
                 System.out.print("dlzka prace : ");
-                int duration = getNumOfDays(sc.nextLine());
-                sc.nextLine();
+                int duration = scanInt();
                 boolean wasAddingSuccessful;
                 wasAddingSuccessful = firm.addJob(jobType, duration, null);
                 if (!wasAddingSuccessful) {
                     System.out.println("Nepodarilo sa rozdelit pracu");
+                } else {
+                    System.out.println("Pridanie prace bolo uspesne");
                 }
+                sc.nextLine();
                 break;
             case DB_EXPORT:
                 database.dbExport(firm, new File("test"));
@@ -92,7 +96,7 @@ public class ConsoleInterface {
                 break;
             case FIRE_EMPLOYEE:
                 System.out.println("Zadaj ID : ");
-                int id = Integer.valueOf(sc.nextLine());
+                int id = scanInt();
                 if (firm.removeEmployee(id)) {
                     System.out.println("podarilo sa rozdelit pracu");
                 } else {
@@ -102,7 +106,7 @@ public class ConsoleInterface {
                 break;
             case SICK_EMPLOYEE:
                 System.out.println("Zadaj ID : ");
-                id = Integer.valueOf(sc.nextLine());
+                id = scanInt();
                 if (firm.makeEmployeeSick(id)) {
                     System.out.println("podarilo sa rozdelit pracu");
                 } else {
@@ -132,25 +136,22 @@ public class ConsoleInterface {
                 break;
             case HEALTHY_EMPLOYEE:
                 System.out.println("Zadaj ID : ");
-                id = Integer.valueOf(sc.nextLine());
+                id = scanInt();
                 firm.getElementByID(firm.getListOfEmployees(), id).setActive(true);
                 break;
             case ACTIVATE_EMPLOYEE:
                 System.out.println("Zadaj ID : ");
-                id = Integer.valueOf(sc.nextLine());
-                sc.nextLine();
+                id = scanInt();
                 Employee employee = firm.getElementByID(firm.getListOfEmployees(), id);
-
-                for (Map.Entry<Character, JobType> map : jobTypeMap.entrySet()) {
-                    if (employee.getCanDoTypeOfJobs().contains(map.getValue())) {
-                        System.out.println(map.getKey() + " : " + map.getValue());
+                jobTypeMap.forEach((key, value) -> {
+                    if (employee.getCanDoTypeOfJobs().contains(value)) {
+                        System.out.println(key + " : " + value);
                     }
-                }
+                });
                 jobType = jobTypeMap.get(sc.nextLine().toUpperCase().charAt(0));
                 if (employee.getEmployeeType().equals(EmployeeType.ASSISTANT)) {
                     System.out.println("ID : ");
-                    id = Integer.valueOf(sc.nextLine());
-                    sc.nextLine();
+                    id = scanInt();
                     System.out.println(employee.action(jobType, firm.getElementByID(firm.getListOfEmployees(), id)));
                 } else {
                     System.out.println(employee.action(jobType, employee));
@@ -159,20 +160,17 @@ public class ConsoleInterface {
                 break;
             case DECREASE_JOB_DURATION:
                 System.out.println("Zadaj ID : ");
-                id = Integer.valueOf(sc.nextLine());
-                sc.nextLine();
+                id = scanInt();
                 System.out.println("Zadaj pocet hodin o kolko chces znizit pracu : ");
-                duration = getNumOfDays(sc.nextLine());
-                sc.nextLine();
+                duration = scanInt();
                 firm.getElementByID(firm.getListOfJobs(), id).decreaseJobDuration(duration);
                 break;
             case SET_CONTRACT_DURATION:
                 System.out.println("Zadaj ID : ");
-                id = Integer.valueOf(sc.nextLine());
+                id = scanInt();
                 sc.nextLine();
                 System.out.println("Zadaj pocet hodin noveho uvazku : ");
-                duration = getNumOfDays(sc.nextLine());
-                sc.nextLine();
+                duration = scanInt();
                 firm.getElementByID(firm.getListOfEmployees(), id).setMonthlyJobDuration(duration);
                 break;
             case PRINT_MONTHLY_EXPENSES:
@@ -200,12 +198,28 @@ public class ConsoleInterface {
         return charToReturn;
     }
 
-    private int getNumOfDays(String input) {
+    private int scanInt() {
+        String numbers = "0123456789";
+        String input;
+        boolean validInput;
+        do {
+            validInput = true;
+            input = sc.nextLine().toUpperCase();
+            for (char c : input.toCharArray()) {
+                if (!numbers.contains(String.valueOf(c))) {
+                    if (input.charAt(input.length() - 1) == 'M') {
+                        break;
+                    }
+                    validInput = false;
+                }
+            }
+        } while (!validInput);
         if (input.charAt(input.length() - 1) == 'M') {
             input = input.substring(0, input.length() - 1);
             return Integer.valueOf(input) * 31;
         }
         return Integer.valueOf(input);
+
     }
 
     private void clearConsole() {
