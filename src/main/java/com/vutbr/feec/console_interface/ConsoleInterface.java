@@ -40,16 +40,20 @@ public class ConsoleInterface {
     }
 
     public void mainLoop() {
-        char chosenOption;
         while (true) {
             System.out.println(getOptions());
-            chosenOption = scanForOption();
-            option = options.get(chosenOption);
+            option = scanChar(options);
             chooseWhatToDoNext();
-
         }
     }
 
+    private <V> V scanChar(Map<Character, V> map) {
+        char option;
+        do {
+            option = sc.nextLine().toUpperCase().charAt(0);
+        } while (!map.keySet().contains(option));
+        return map.get(option);
+    }
 
     private void chooseWhatToDoNext() {
         switch (option) {
@@ -60,12 +64,12 @@ public class ConsoleInterface {
                 String secondName = sc.nextLine();
                 System.out.print("pozicia : \n");
                 employeeTypeMap.forEach((key, value) -> System.out.println(key + " : " + value));
-                EmployeeType employeeType = employeeTypeMap.get(sc.nextLine().toUpperCase().charAt(0));
+                EmployeeType employeeType = scanChar(employeeTypeMap);
                 firm.addEmployee(firstName, secondName, employeeType);
                 break;
             case ADD_JOB:
                 jobTypeMap.forEach((key, value) -> System.out.println(key + " : " + value));
-                JobType jobType = jobTypeMap.get(sc.nextLine().toUpperCase().charAt(0));
+                JobType jobType = scanChar(jobTypeMap);
                 System.out.print("dlzka prace : ");
                 int duration = scanInt();
                 boolean wasAddingSuccessful;
@@ -117,7 +121,7 @@ public class ConsoleInterface {
             case PRINT_EMPLOYEES:
                 char option;
                 do {
-                    System.out.println("Zoradit podla (A)priezviska lebo (B)id ?");
+                    System.out.println("Zoradit podla (A) priezviska lebo (B) id ?");
                     option = sc.nextLine().toUpperCase().charAt(0);
                 } while (option != 'A' && option != 'B');
                 switch (option) {
@@ -148,7 +152,7 @@ public class ConsoleInterface {
                         System.out.println(key + " : " + value);
                     }
                 });
-                jobType = jobTypeMap.get(sc.nextLine().toUpperCase().charAt(0));
+                jobType = scanChar(jobTypeMap);
                 if (employee.getEmployeeType().equals(EmployeeType.ASSISTANT)) {
                     System.out.println("ID : ");
                     id = scanInt();
@@ -187,15 +191,6 @@ public class ConsoleInterface {
             toReturn = toReturn.concat(optionMap.getKey() + " : " + optionMap.getValue().getDesc() + "\n");
         }
         return toReturn;
-    }
-
-    private char scanForOption() {
-        char charToReturn;
-        do {
-
-            charToReturn = sc.nextLine().toUpperCase().charAt(0);
-        } while (!options.keySet().contains(charToReturn));
-        return charToReturn;
     }
 
     private int scanInt() {
