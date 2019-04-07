@@ -7,6 +7,7 @@ import com.vutbr.feec.firm.Job;
 import com.vutbr.feec.firm.TypeOfJob;
 import com.vutbr.feec.firm.Firm;
 
+import java.io.IOException;
 import java.util.*;
 
 public class ConsoleInterface {
@@ -64,7 +65,8 @@ public class ConsoleInterface {
                 TypeOfJob jobType = jobTypeMap.get(sc.nextLine().toUpperCase().charAt(0));
 
                 System.out.print("dlzka prace : ");
-                int duration = sc.nextLine().charAt(0);
+                int duration = sc.nextInt();
+                sc.nextLine();
                 boolean wasAddingSuccessful;
                 wasAddingSuccessful = firm.addJob(jobType, duration, null);
                 if (!wasAddingSuccessful) {
@@ -89,23 +91,45 @@ public class ConsoleInterface {
             case FIRE_EMPLOYEE:
                 System.out.println("Zadaj ID : ");
                 int id = sc.nextInt();
-                firm.removeEmployee(id);
+                if (firm.removeEmployee(id)) {
+                    System.out.println("podarilo sa rozdelit pracu");
+                } else {
+                    System.out.println("nepodarilo sa rozdeilt pracu");
+                }
                 sc.nextLine();
                 break;
             case SICK_EMPLOYEE:
                 System.out.println("Zadaj ID : ");
                 id = sc.nextInt();
-                firm.makeEmployeeSick(id);
+                if (firm.makeEmployeeSick(id)) {
+                    System.out.println("podarilo sa rozdelit pracu");
+                } else {
+                    System.out.println("nepodarilo sa rozdeilt pracu");
+                }
                 sc.nextLine();
                 break;
             case PRINT_EMPLOYEES:
+                char option;
+                do {
+                    System.out.println("Zoradit podla (A)priezviska lebo (B)id ?");
+                    option = sc.nextLine().toUpperCase().charAt(0);
+                } while (option != 'A' && option != 'B');
+
+                switch (option) {
+                    case 'A':
+                        firm.getListOfEmployees().sort(Comparator.comparing(Employee::getSecondName));
+                        break;
+                    case 'B':
+                        firm.getListOfEmployees().sort(Comparator.comparingInt(Employee::hashCode));
+                        break;
+                }
                 for (Employee employee : firm.getListOfEmployees()) {
-                    System.out.println("\n\nID : " + employee.getId()
+                    System.out.print("\n\nID : " + employee.getId()
                             + "\n meno : " + employee.getFirstName()
                             + "\n priezvisko : " + employee.getSecondName()
                             + "\n pozicia : " + employee.getEmployeeType() + "\nList prac : ");
                     for (Job job : employee.getListOfJobs()) {
-                        System.out.print(" ID : " + job.getId()
+                        System.out.print(" \nID : " + job.getId()
                                 + "\n  pocet hodin : " + job.getDuration()
                                 + "\n  typ prace : " + job.getTypeOfJob());
                     }
@@ -115,6 +139,7 @@ public class ConsoleInterface {
             case HEALTHY_EMPLOYEE:
                 System.out.println("Zadaj ID : ");
                 id = sc.nextInt();
+                sc.nextLine();
                 firm.getListOfEmployees().get(id).setActive(true);
                 break;
             case ACTIVATE_EMPLOYEE:
@@ -159,15 +184,16 @@ public class ConsoleInterface {
                 break;
             case PRINT_MONTHLY_EXPENSES:
                 System.out.println(firm.getMonthlyExpenses());
+                sc.nextLine();
                 break;
-
         }
     }
 
     private String getOptions() {
+        clearConsole();
         String toReturn = "";
         for (Map.Entry<Character, Option> optionMap : options.entrySet()) {
-            toReturn = toReturn.concat(optionMap.getKey() + ": " + optionMap.getValue().getDesc() + "\n");
+            toReturn = toReturn.concat(optionMap.getKey() + " : " + optionMap.getValue().getDesc() + "\n");
         }
         return toReturn;
     }
@@ -179,5 +205,22 @@ public class ConsoleInterface {
             charToReturn = sc.nextLine().toUpperCase().charAt(0);
         } while (!options.keySet().contains(charToReturn));
         return charToReturn;
+    }
+
+    private void clearConsole() {
+        String currentOs = System.getProperty("os.name").toLowerCase();
+
+        if (currentOs.contains("linux")) {
+            System.out.print("\033[H\033[2J");
+            System.out.flush();
+        } else if (currentOs.contains("windows")) {
+            try {
+                new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+            } catch (IOException | InterruptedException e) {
+                System.out.println("can't clean console");
+            }
+        } else {
+            System.out.println("unknown OS");
+        }
     }
 }

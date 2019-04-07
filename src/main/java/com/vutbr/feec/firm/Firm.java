@@ -74,12 +74,7 @@ public class Firm implements Serializable {
                 capableEmployees.add(employee);
             }
         }
-        capableEmployees.sort(new Comparator<Employee>() {
-            @Override
-            public int compare(Employee o1, Employee o2) {
-                return o1.getTariff() - o2.getTariff();
-            }
-        });
+        capableEmployees.sort(Comparator.comparingInt(Employee::getTariff));
 
         for (Employee employee : capableEmployees) {
             int size = employee.getListOfJobs().size();
@@ -87,6 +82,7 @@ public class Firm implements Serializable {
                 maxWork = size;
             }
         }
+
         int indexToCheck = 0;
         for (int i = 0; i <= maxWork; i++) {
             for (Employee employee : capableEmployees) {
@@ -106,13 +102,12 @@ public class Firm implements Serializable {
            TODO zadavat hodiny alebo mesiac
            TODO databaza
            TODO Jednotkovy test
+           TODO activation
          */
-        for (Employee employee : workingEmployees) {
-            if (employee.getWorkingHours() + duration > employee.getContractLength()) {
-                workingEmployees.remove(employee);
-            }
-        }
 
+        removeOverworkedEmployees(duration, workingEmployees);
+        // TODO rekurzivne volat metodu pokial nevyskusa vsetkych
+        // If all employees are overworked
         if (workingEmployees.isEmpty()) {
             return false;
         }
@@ -130,32 +125,48 @@ public class Firm implements Serializable {
         return true;
     }
 
+    private void removeOverworkedEmployees(int duration, List<Employee> workingEmployees) {
+        for (Employee employee : workingEmployees) {
+            if (employee.getWorkingHours() + duration / workingEmployees.size() > employee.getContractLength()) {
+                System.out.println(employee.getWorkingHours() + duration / workingEmployees.size());
+                workingEmployees.remove(employee);
+            }
+            if (workingEmployees.isEmpty()) {
+                break;
+            }
+        }
+    }
+
     /*public void doJob(int index, int duration) {
         if (listOfJobs.get(index).doJob(duration) < 0) {
             listOfJobs.remove(index);
         }
     }*/
 
-    public void removeEmployee(int id) {
+    public boolean removeEmployee(int id) {
         Employee employeeToRemove = listOfEmployees.get(id);
         listOfEmployees.remove(id);
+        boolean toReturn = true;
         for (Job job : employeeToRemove.getListOfJobs()) {
-            this.addJob(job.getTypeOfJob(), job.getDuration(), job);
+            toReturn = this.addJob(job.getTypeOfJob(), job.getDuration(), job);
             if (employeeToRemove.getListOfJobs().isEmpty()) {
-                return;
+                break;
             }
         }
+        return toReturn;
     }
 
-    public void makeEmployeeSick(int id) {
+    public boolean makeEmployeeSick(int id) {
         Employee sickEmployee = listOfEmployees.get(id);
         sickEmployee.setActive(false);
+        boolean toReturn = true;
         for (Job job : sickEmployee.getListOfJobs()) {
-            this.addJob(job.getTypeOfJob(), job.getDuration(), job);
+            toReturn = this.addJob(job.getTypeOfJob(), job.getDuration(), job);
             if (sickEmployee.getListOfJobs().isEmpty()) {
-                return;
+                break;
             }
         }
+        return toReturn;
     }
 
     public List<Employee> getListOfEmployees() {

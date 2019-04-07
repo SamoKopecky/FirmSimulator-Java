@@ -8,13 +8,13 @@ import com.vutbr.feec.firm.Firm;
 public class App {
     public static void main(String[] args) {
         Firm firm = new Firm();
-        firm.addEmployee("Peter", "Kopecky", EmployeeType.ASSISTANT);
-        firm.addEmployee("Peter", "Kopecky", EmployeeType.DESIGNER);
-        firm.addEmployee("Peter", "Kopecky", EmployeeType.TECHNICIAN);
-        firm.addEmployee("Peter", "Kopecky", EmployeeType.CEO);
-        firm.addEmployee("Peter", "Kopecky", EmployeeType.ASSISTANT);
-        firm.addEmployee("Peter", "Kopecky", EmployeeType.ASSISTANT);
-        firm.addJob(TypeOfJob.ADMINISTRATIVE_JOB, 6, null);
+        firm.addEmployee("Peter", "Copecky", EmployeeType.ASSISTANT);
+        firm.addEmployee("Peter", "Bpecky", EmployeeType.DESIGNER);
+        firm.addEmployee("Peter", "Aopecky", EmployeeType.TECHNICIAN);
+        firm.addEmployee("Peter", "Dopecky", EmployeeType.CEO);
+        firm.addEmployee("Peter", "eopecky", EmployeeType.ASSISTANT);
+        firm.addEmployee("Peter", "Eopecky", EmployeeType.ASSISTANT);
+//        firm.addJob(TypeOfJob.ADMINISTRATIVE_JOB, 6, null);
         ConsoleInterface consoleInterface = new ConsoleInterface(firm);
         consoleInterface.mainLoop();
     }
