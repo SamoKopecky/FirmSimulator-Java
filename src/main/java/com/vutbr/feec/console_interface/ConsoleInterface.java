@@ -133,13 +133,13 @@ public class ConsoleInterface {
             case HEALTHY_EMPLOYEE:
                 System.out.println("Zadaj ID : ");
                 id = Integer.valueOf(sc.nextLine());
-                firm.getListOfEmployees().get(id).setActive(true);
+                firm.getElementByID(firm.getListOfEmployees(), id).setActive(true);
                 break;
             case ACTIVATE_EMPLOYEE:
                 System.out.println("Zadaj ID : ");
                 id = Integer.valueOf(sc.nextLine());
                 sc.nextLine();
-                Employee employee = firm.getListOfEmployees().get(id);
+                Employee employee = firm.getElementByID(firm.getListOfEmployees(), id);
 
                 for (Map.Entry<Character, JobType> map : jobTypeMap.entrySet()) {
                     if (employee.getCanDoTypeOfJobs().contains(map.getValue())) {
@@ -151,7 +151,7 @@ public class ConsoleInterface {
                     System.out.println("ID : ");
                     id = Integer.valueOf(sc.nextLine());
                     sc.nextLine();
-                    System.out.println(employee.action(jobType, firm.getListOfEmployees().get(id)));
+                    System.out.println(employee.action(jobType, firm.getElementByID(firm.getListOfEmployees(), id)));
                 } else {
                     System.out.println(employee.action(jobType, employee));
                 }
@@ -164,7 +164,7 @@ public class ConsoleInterface {
                 System.out.println("Zadaj pocet hodin o kolko chces znizit pracu : ");
                 duration = getNumOfDays(sc.nextLine());
                 sc.nextLine();
-                firm.getListOfJobs().get(id).decreaseJobDuration(duration);
+                firm.getElementByID(firm.getListOfJobs(), id).decreaseJobDuration(duration);
                 break;
             case SET_CONTRACT_DURATION:
                 System.out.println("Zadaj ID : ");
@@ -173,7 +173,7 @@ public class ConsoleInterface {
                 System.out.println("Zadaj pocet hodin noveho uvazku : ");
                 duration = getNumOfDays(sc.nextLine());
                 sc.nextLine();
-                firm.getListOfEmployees().get(id).setMonthlyJobDuration(duration);
+                firm.getElementByID(firm.getListOfEmployees(), id).setMonthlyJobDuration(duration);
                 break;
             case PRINT_MONTHLY_EXPENSES:
                 System.out.println(firm.getMonthlyExpenses());

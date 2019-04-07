@@ -131,7 +131,7 @@ public abstract class Employee implements Serializable {
 
     @Override
     public int hashCode() {
-        return id * 13;
+        return id;
     }
 
     @Override

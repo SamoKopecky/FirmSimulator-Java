@@ -56,4 +56,9 @@ public class Job implements Serializable {
                 ", workingEmployees=" + workingEmployees +
                 '}';
     }
+
+    @Override
+    public int hashCode() {
+        return id;
+    }
 }

@@ -5,7 +5,6 @@ import com.vutbr.feec.employee.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
 
 public class Firm implements Serializable {
@@ -100,9 +99,15 @@ public class Firm implements Serializable {
         for (Employee employee : workingEmployees) {
             employee.setTested(true);
         }
+        boolean toReturn = true;
         removeOverworkedEmployees(duration, workingEmployees);
         if (workingEmployees.isEmpty()) {
-            addJob(jobType, duration, jobToReplace);
+           toReturn = addJob(jobType, duration, jobToReplace);
+        }
+        for (Employee employee : workingEmployees) {
+            employee.setTested(false);
+        }
+        if(!toReturn) {
             return false;
         }
 
@@ -132,7 +137,7 @@ public class Firm implements Serializable {
     }
 
     public boolean removeEmployee(int id) {
-        Employee employeeToRemove = listOfEmployees.get(id);
+        Employee employeeToRemove = getElementByID(listOfEmployees, id);
         listOfEmployees.remove(id);
         boolean toReturn = true;
         for (Job job : employeeToRemove.getListOfJobs()) {
@@ -145,7 +150,7 @@ public class Firm implements Serializable {
     }
 
     public boolean makeEmployeeSick(int id) {
-        Employee sickEmployee = listOfEmployees.get(id);
+        Employee sickEmployee = getElementByID(listOfEmployees, id);
         sickEmployee.setActive(false);
         boolean toReturn = true;
         for (Job job : sickEmployee.getListOfJobs()) {
@@ -157,18 +162,20 @@ public class Firm implements Serializable {
         return toReturn;
     }
 
+    public <T> T getElementByID(List<T> list, int id) {
+        for (T object : list) {
+            if (object.hashCode() == id) {
+                return object;
+            }
+        }
+        return null;
+    }
+
     public List<Employee> getListOfEmployees() {
         return listOfEmployees;
     }
 
     public List<Job> getListOfJobs() {
         return listOfJobs;
-    }
-
-    @Override
-    public String toString() {
-        return "Firm{" +
-                "listOfEmployees=\n" + listOfEmployees +
-                '}';
     }
 }
