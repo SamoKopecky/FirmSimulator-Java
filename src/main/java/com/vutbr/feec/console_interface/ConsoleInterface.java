@@ -64,7 +64,7 @@ public class ConsoleInterface {
                 JobType jobType = jobTypeMap.get(sc.nextLine().toUpperCase().charAt(0));
 
                 System.out.print("dlzka prace : ");
-                int duration = sc.nextInt();
+                int duration = getNumOfDays(sc.nextLine());
                 sc.nextLine();
                 boolean wasAddingSuccessful;
                 wasAddingSuccessful = firm.addJob(jobType, duration, null);
@@ -89,7 +89,7 @@ public class ConsoleInterface {
                 break;
             case FIRE_EMPLOYEE:
                 System.out.println("Zadaj ID : ");
-                int id = sc.nextInt();
+                int id = Integer.valueOf(sc.nextLine());
                 if (firm.removeEmployee(id)) {
                     System.out.println("podarilo sa rozdelit pracu");
                 } else {
@@ -99,7 +99,7 @@ public class ConsoleInterface {
                 break;
             case SICK_EMPLOYEE:
                 System.out.println("Zadaj ID : ");
-                id = sc.nextInt();
+                id = Integer.valueOf(sc.nextLine());
                 if (firm.makeEmployeeSick(id)) {
                     System.out.println("podarilo sa rozdelit pracu");
                 } else {
@@ -129,13 +129,12 @@ public class ConsoleInterface {
                 break;
             case HEALTHY_EMPLOYEE:
                 System.out.println("Zadaj ID : ");
-                id = sc.nextInt();
-                sc.nextLine();
+                id = Integer.valueOf(sc.nextLine());
                 firm.getListOfEmployees().get(id).setActive(true);
                 break;
             case ACTIVATE_EMPLOYEE:
                 System.out.println("Zadaj ID : ");
-                id = sc.nextInt();
+                id = Integer.valueOf(sc.nextLine());
                 sc.nextLine();
                 Employee employee = firm.getListOfEmployees().get(id);
 
@@ -147,7 +146,7 @@ public class ConsoleInterface {
                 jobType = jobTypeMap.get(sc.nextLine().toUpperCase().charAt(0));
                 if (employee.getEmployeeType().equals(EmployeeType.ASSISTANT)) {
                     System.out.println("ID : ");
-                    id = sc.nextInt();
+                    id = Integer.valueOf(sc.nextLine());
                     sc.nextLine();
                     System.out.println(employee.action(jobType, firm.getListOfEmployees().get(id)));
                 } else {
@@ -157,19 +156,19 @@ public class ConsoleInterface {
                 break;
             case DECREASE_JOB_DURATION:
                 System.out.println("Zadaj ID : ");
-                id = sc.nextInt();
+                id = Integer.valueOf(sc.nextLine());
                 sc.nextLine();
                 System.out.println("Zadaj pocet hodin o kolko chces znizit pracu : ");
-                duration = sc.nextInt();
+                duration = getNumOfDays(sc.nextLine());
                 sc.nextLine();
                 firm.getListOfJobs().get(id).decreaseJobDuration(duration);
                 break;
             case SET_CONTRACT_DURATION:
                 System.out.println("Zadaj ID : ");
-                id = sc.nextInt();
+                id = Integer.valueOf(sc.nextLine());
                 sc.nextLine();
                 System.out.println("Zadaj pocet hodin noveho uvazku : ");
-                duration = sc.nextInt();
+                duration = getNumOfDays(sc.nextLine());
                 sc.nextLine();
                 firm.getListOfEmployees().get(id).setMonthlyJobDuration(duration);
                 break;
@@ -196,6 +195,14 @@ public class ConsoleInterface {
             charToReturn = sc.nextLine().toUpperCase().charAt(0);
         } while (!options.keySet().contains(charToReturn));
         return charToReturn;
+    }
+
+    private int getNumOfDays(String input) {
+        if (input.charAt(input.length() - 1) == 'M') {
+            input = input.substring(0, input.length() - 1);
+            return Integer.valueOf(input) * 31;
+        }
+        return Integer.valueOf(input);
     }
 
     private void clearConsole() {

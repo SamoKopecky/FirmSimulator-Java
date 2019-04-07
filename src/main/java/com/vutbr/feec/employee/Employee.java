@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Set;
 
 public abstract class Employee implements Serializable {
+    private boolean tested = false;
     private static int idCounter = 0;
     private int id;
     private String firstName;
@@ -37,6 +38,14 @@ public abstract class Employee implements Serializable {
             temp += job.getDuration();
         }
         return temp;
+    }
+
+    public void setTested(boolean tested) {
+        this.tested = tested;
+    }
+
+    public boolean isTested() {
+        return tested;
     }
 
     public void decrementId() {

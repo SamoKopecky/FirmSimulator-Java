@@ -5,6 +5,7 @@ import com.vutbr.feec.employee.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 
 public class Firm implements Serializable {
@@ -86,27 +87,26 @@ public class Firm implements Serializable {
         int indexToCheck = 0;
         for (int i = 0; i <= maxWork; i++) {
             for (Employee employee : capableEmployees) {
-                if (employee.getListOfJobs().size() == i && workingEmployees.isEmpty()) {
+                if (employee.getListOfJobs().size() == i && workingEmployees.isEmpty() && !employee.isTested()) {
                     workingEmployees.add(employee);
                     tariff = employee.getTariff();
                     indexToCheck = i;
                 } else if (employee.getListOfJobs().size() == indexToCheck && employee.getTariff() == tariff
-                        && !workingEmployees.contains(employee)) {
+                        && !workingEmployees.contains(employee) && !employee.isTested()) {
                     workingEmployees.add(employee);
                 }
             }
         }
         /*
-           TODO vydelit poctom kolegou na praci, alebo to dat do novej metody to job triedy
-           TODO zadavat hodiny alebo mesiac
            TODO databaza
            TODO Jednotkovy test
          */
-
+        for (Employee employee : workingEmployees) {
+            employee.setTested(true);
+        }
         removeOverworkedEmployees(duration, workingEmployees);
-        // TODO rekurzivne volat metodu pokial nevyskusa vsetkych
-        // If all employees are overworked
         if (workingEmployees.isEmpty()) {
+            addJob(jobType, duration, jobToReplace);
             return false;
         }
 
@@ -124,14 +124,14 @@ public class Firm implements Serializable {
     }
 
     private void removeOverworkedEmployees(int duration, List<Employee> workingEmployees) {
+        List<Employee> copy = new ArrayList<>();
         for (Employee employee : workingEmployees) {
-            if (employee.getWorkingHours() + duration / workingEmployees.size() > employee.getContractLength()) {
-                System.out.println(employee.getWorkingHours() + duration / workingEmployees.size());
-                workingEmployees.remove(employee);
+            if (employee.getWorkingHours() + (duration / workingEmployees.size()) > employee.getContractLength()) {
+                copy.add(employee);
             }
-            if (workingEmployees.isEmpty()) {
-                break;
-            }
+        }
+        for (Employee employee : copy) {
+            workingEmployees.remove(employee);
         }
     }
 
