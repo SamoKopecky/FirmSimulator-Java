@@ -56,141 +56,145 @@ public class ConsoleInterface {
     }
 
     private void chooseWhatToDoNext() {
-        switch (option) {
-            case ADD_EMPLOYEE:
-                System.out.print("meno : ");
-                String firstName = sc.nextLine();
-                System.out.print("priezvisko : ");
-                String secondName = sc.nextLine();
-                System.out.print("pozicia : \n");
-                employeeTypeMap.forEach((key, value) -> System.out.println(key + " : " + value));
-                EmployeeType employeeType = scanChar(employeeTypeMap);
-                firm.addEmployee(firstName, secondName, employeeType);
-                break;
-            case ADD_JOB:
-                jobTypeMap.forEach((key, value) -> System.out.println(key + " : " + value));
-                JobType jobType = scanChar(jobTypeMap);
-                System.out.print("dlzka prace : ");
-                int duration = scanInt();
-                boolean wasAddingSuccessful;
-                wasAddingSuccessful = firm.addJob(jobType, duration, null);
-                if (!wasAddingSuccessful) {
-                    System.out.println("Nepodarilo sa rozdelit pracu");
-                } else {
-                    System.out.println("Pridanie prace bolo uspesne");
-                }
-                sc.nextLine();
-                break;
-            case DB_EXPORT:
-                database.dbExport(firm, new File("test"));
-                break;
-            case DB_IMPORT:
-                firm = database.dbImport(new File("test"));
-                break;
-            case PRINT_JOBS:
-                for (EmployeeType type : EmployeeType.values()) {
-                    System.out.println(type + ":");
-                    for (Employee employee : firm.getListOfEmployees()) {
-                        if (employee.getEmployeeType().equals(type)) {
-                            System.out.println("ID : " + employee.getId() + " volne uvazky : " + employee.getContractLength());
+        try {
+            switch (option) {
+                case ADD_EMPLOYEE:
+                    System.out.print("meno : ");
+                    String firstName = sc.nextLine();
+                    System.out.print("priezvisko : ");
+                    String secondName = sc.nextLine();
+                    System.out.print("pozicia : \n");
+                    employeeTypeMap.forEach((key, value) -> System.out.println(key + " : " + value));
+                    EmployeeType employeeType = scanChar(employeeTypeMap);
+                    if (!firm.addEmployee(firstName, secondName, employeeType))
+                        System.out.println("COE already exists");
+                    break;
+                case ADD_JOB:
+                    jobTypeMap.forEach((key, value) -> System.out.println(key + " : " + value));
+                    JobType jobType = scanChar(jobTypeMap);
+                    System.out.print("dlzka prace : ");
+                    int duration = scanInt();
+                    boolean wasAddingSuccessful;
+                    wasAddingSuccessful = firm.addJob(jobType, duration, null);
+                    if (!wasAddingSuccessful) {
+                        System.out.println("Nepodarilo sa rozdelit pracu");
+                    } else {
+                        System.out.println("Pridanie prace bolo uspesne");
+                    }
+                    sc.nextLine();
+                    break;
+                case DB_EXPORT:
+                    database.dbExport(firm, new File(database.getCurrDate()));
+                    break;
+                case DB_IMPORT:
+                    System.out.println("zvol si z ktoreho suboru chces importovat databasu");
+                    firm = database.dbImport(new File(sc.nextLine()));
+                    break;
+                case PRINT_JOBS:
+                    for (EmployeeType type : EmployeeType.values()) {
+                        System.out.println(type + ":");
+                        for (Employee employee : firm.getListOfEmployees()) {
+                            if (employee.getEmployeeType().equals(type)) {
+                                System.out.println("ID : " + employee.getId() + " volne uvazky : " + employee.getContractLength());
+                            }
                         }
                     }
-                }
-                sc.nextLine();
-                break;
-            case FIRE_EMPLOYEE:
-                System.out.println("Zadaj ID : ");
-                int id = scanInt();
-                if (firm.removeEmployee(id)) {
-                    System.out.println("podarilo sa rozdelit pracu");
-                } else {
-                    System.out.println("nepodarilo sa rozdeilt pracu");
-                }
-                sc.nextLine();
-                break;
-            case SICK_EMPLOYEE:
-                System.out.println("Zadaj ID : ");
-                id = scanInt();
-                if (firm.makeEmployeeSick(id)) {
-                    System.out.println("podarilo sa rozdelit pracu");
-                } else {
-                    System.out.println("nepodarilo sa rozdeilt pracu");
-                }
-                sc.nextLine();
-                break;
-            case PRINT_EMPLOYEES:
-                char option;
-                do {
-                    System.out.println("Zoradit podla (A) priezviska lebo (B) id ?");
-                    option = sc.nextLine().toUpperCase().charAt(0);
-                } while (option != 'A' && option != 'B');
-                switch (option) {
-                    case 'A':
-                        firm.getListOfEmployees().sort(Comparator.comparing(Employee::getSecondName));
-                        break;
-                    case 'B':
-                        firm.getListOfEmployees().sort(Comparator.comparingInt(Employee::hashCode));
-                        break;
-                }
-                for (Employee employee : firm.getListOfEmployees()) {
-                    System.out.println(employee.toString());
-                }
-                sc.nextLine();
-                firm.getListOfEmployees().sort(Comparator.comparingInt(Employee::hashCode));
-                break;
-            case HEALTHY_EMPLOYEE:
-                System.out.println("Zadaj ID : ");
-                id = scanInt();
-                firm.getElementByID(firm.getListOfEmployees(), id).setActive(true);
-                break;
-            case ACTIVATE_EMPLOYEE:
-                System.out.println("Zadaj ID : ");
-                id = scanInt();
-                Employee employee = firm.getElementByID(firm.getListOfEmployees(), id);
-                jobTypeMap.forEach((key, value) -> {
-                    if (employee.getCanDoTypeOfJobs().contains(value)) {
-                        System.out.println(key + " : " + value);
+                    sc.nextLine();
+                    break;
+                case FIRE_EMPLOYEE:
+                    System.out.println("Zadaj ID : ");
+                    int id = scanInt();
+                    if (firm.removeEmployee(id)) {
+                        System.out.println("podarilo sa rozdelit pracu");
+                    } else {
+                        System.out.println("nepodarilo sa rozdeilt pracu");
                     }
-                });
-                jobType = scanChar(jobTypeMap);
-                if (employee.getEmployeeType().equals(EmployeeType.ASSISTANT)) {
-                    System.out.println("ID : ");
+                    sc.nextLine();
+                    break;
+                case SICK_EMPLOYEE:
+                    System.out.println("Zadaj ID : ");
                     id = scanInt();
-                    System.out.println(employee.action(jobType, firm.getElementByID(firm.getListOfEmployees(), id)));
-                } else {
-                    System.out.println(employee.action(jobType, employee));
-                }
-                sc.nextLine();
-                break;
-            case DECREASE_JOB_DURATION:
-                System.out.println("Zadaj ID : ");
-                id = scanInt();
-                System.out.println("Zadaj pocet hodin o kolko chces znizit pracu : ");
-                duration = scanInt();
-                firm.getElementByID(firm.getListOfJobs(), id).decreaseJobDuration(duration);
-                break;
-            case SET_CONTRACT_DURATION:
-                System.out.println("Zadaj ID : ");
-                id = scanInt();
-                sc.nextLine();
-                System.out.println("Zadaj pocet hodin noveho uvazku : ");
-                duration = scanInt();
-                firm.getElementByID(firm.getListOfEmployees(), id).setMonthlyJobDuration(duration);
-                break;
-            case PRINT_MONTHLY_EXPENSES:
-                System.out.println(firm.getMonthlyExpenses());
-                sc.nextLine();
-                break;
+                    if (firm.makeEmployeeSick(id)) {
+                        System.out.println("podarilo sa rozdelit pracu");
+                    } else {
+                        System.out.println("nepodarilo sa rozdeilt pracu");
+                    }
+                    sc.nextLine();
+                    break;
+                case PRINT_EMPLOYEES:
+                    char option;
+                    do {
+                        System.out.println("Zoradit podla (A) priezviska lebo (B) id ?");
+                        option = sc.nextLine().toUpperCase().charAt(0);
+                    } while (option != 'A' && option != 'B');
+                    switch (option) {
+                        case 'A':
+                            firm.getListOfEmployees().sort(Comparator.comparing(Employee::getSecondName));
+                            break;
+                        case 'B':
+                            firm.getListOfEmployees().sort(Comparator.comparingInt(Employee::hashCode));
+                            break;
+                    }
+                    for (Employee employee : firm.getListOfEmployees()) {
+                        System.out.println(employee.toString());
+                    }
+                    sc.nextLine();
+                    firm.getListOfEmployees().sort(Comparator.comparingInt(Employee::hashCode));
+                    break;
+                case HEALTHY_EMPLOYEE:
+                    System.out.println("Zadaj ID : ");
+                    id = scanInt();
+                    firm.getObjectByID(firm.getListOfEmployees(), id).setActive(true);
+                    break;
+                case ACTIVATE_EMPLOYEE:
+                    System.out.println("Zadaj ID : ");
+                    id = scanInt();
+                    Employee employee = firm.getObjectByID(firm.getListOfEmployees(), id);
+                    jobTypeMap.forEach((key, value) -> {
+                        if (employee.getCanDoTypeOfJobs().contains(value)) {
+                            System.out.println(key + " : " + value);
+                        }
+                    });
+                    jobType = scanChar(jobTypeMap);
+                    if (employee.getEmployeeType().equals(EmployeeType.ASSISTANT)) {
+                        System.out.println("ID : ");
+                        id = scanInt();
+                        System.out.println(employee.action(jobType, firm.getObjectByID(firm.getListOfEmployees(), id)));
+                    } else {
+                        System.out.println(employee.action(jobType, employee));
+                    }
+                    sc.nextLine();
+                    break;
+                case DECREASE_JOB_DURATION:
+                    System.out.println("Zadaj ID : ");
+                    id = scanInt();
+                    System.out.println("Zadaj pocet hodin o kolko chces znizit pracu : ");
+                    duration = scanInt();
+                    firm.getObjectByID(firm.getListOfJobs(), id).decreaseJobDuration(duration);
+                    break;
+                case SET_CONTRACT_DURATION:
+                    System.out.println("Zadaj ID : ");
+                    id = scanInt();
+                    sc.nextLine();
+                    System.out.println("Zadaj pocet hodin noveho uvazku : ");
+                    duration = scanInt();
+                    firm.getObjectByID(firm.getListOfEmployees(), id).setMonthlyJobDuration(duration);
+                    break;
+                case PRINT_MONTHLY_EXPENSES:
+                    System.out.println(firm.getMonthlyExpenses());
+                    sc.nextLine();
+                    break;
+            }
+        } catch (NullPointerException e) {
+            System.out.println("Take id neexistuje");
         }
     }
 
     private String getOptions() {
         clearConsole();
-        String toReturn = "";
-        for (Map.Entry<Character, Option> optionMap : options.entrySet()) {
-            toReturn = toReturn.concat(optionMap.getKey() + " : " + optionMap.getValue().getDesc() + "\n");
-        }
-        return toReturn;
+        StringBuilder sb = new StringBuilder();
+        options.forEach((key, value) -> sb.append(key + " : " + value.getDesc() + "\n"));
+        return sb.toString();
     }
 
     private int scanInt() {

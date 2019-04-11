@@ -33,7 +33,6 @@ public class Firm implements Serializable {
                     listOfEmployees.add(employee);
                     return true;
                 } else {
-                    System.out.println("COE uz exisuje");
                     employee.decrementId();
                     return false;
                 }
@@ -44,8 +43,14 @@ public class Firm implements Serializable {
 
     public int getMonthlyExpenses() {
         int expenses = 0;
+        int duration;
+
         for (Job job : listOfJobs) {
-            expenses += job.getDuration() * job.getWorkingEmployees().get(0).getTariff();
+            duration = job.getDuration();
+            if (duration > 31) {
+                duration = 31;
+            }
+            expenses += duration * job.getWorkingEmployees().get(0).getTariff();
         }
         return expenses;
     }
@@ -102,12 +107,12 @@ public class Firm implements Serializable {
         boolean toReturn = true;
         removeOverworkedEmployees(duration, workingEmployees);
         if (workingEmployees.isEmpty()) {
-           toReturn = addJob(jobType, duration, jobToReplace);
+            toReturn = addJob(jobType, duration, jobToReplace);
         }
         for (Employee employee : workingEmployees) {
             employee.setTested(false);
         }
-        if(!toReturn) {
+        if (!toReturn) {
             return false;
         }
 
@@ -136,9 +141,9 @@ public class Firm implements Serializable {
         }
     }
 
-    public boolean removeEmployee(int id) {
-        Employee employeeToRemove = getElementByID(listOfEmployees, id);
-        listOfEmployees.remove(id);
+    public boolean removeEmployee(int id) throws NullPointerException{
+        Employee employeeToRemove = getObjectByID(listOfEmployees, id);
+        listOfEmployees.remove(employeeToRemove);
         boolean toReturn = true;
         for (Job job : employeeToRemove.getListOfJobs()) {
             toReturn = this.addJob(job.getJobType(), job.getDuration(), job);
@@ -149,8 +154,8 @@ public class Firm implements Serializable {
         return toReturn;
     }
 
-    public boolean makeEmployeeSick(int id) {
-        Employee sickEmployee = getElementByID(listOfEmployees, id);
+    public boolean makeEmployeeSick(int id) throws NullPointerException{
+        Employee sickEmployee = getObjectByID(listOfEmployees, id);
         sickEmployee.setActive(false);
         boolean toReturn = true;
         for (Job job : sickEmployee.getListOfJobs()) {
@@ -162,13 +167,13 @@ public class Firm implements Serializable {
         return toReturn;
     }
 
-    public <T> T getElementByID(List<T> list, int id) {
+    public <T> T getObjectByID(List<T> list, int id) throws NullPointerException {
         for (T object : list) {
             if (object.hashCode() == id) {
                 return object;
             }
         }
-        return null;
+        throw new NullPointerException();
     }
 
     public List<Employee> getListOfEmployees() {
