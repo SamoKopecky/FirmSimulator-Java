@@ -56,6 +56,10 @@ public class Firm implements Serializable {
     }
 
     public boolean addJob(JobType jobType, int duration, Job jobToReplace) {
+        if (listOfEmployees.isEmpty() || duration == 0) {
+            return false;
+        }
+
         if (jobToReplace != null) {
             for (Job job : listOfJobs) {
                 if (job.equals(jobToReplace)) {
@@ -104,28 +108,33 @@ public class Firm implements Serializable {
         for (Employee employee : workingEmployees) {
             employee.setTested(true);
         }
+
         boolean toReturn = true;
         removeOverworkedEmployees(duration, workingEmployees);
         if (workingEmployees.isEmpty()) {
+            boolean allTested = true;
+            for (Employee employee : listOfEmployees) {
+                if (!employee.isTested() && employee.getCanDoTypeOfJobs().contains(jobType)) {
+                    allTested = false;
+                }
+            }
+            if (allTested) return false;
             toReturn = addJob(jobType, duration, jobToReplace);
         }
-        for (Employee employee : workingEmployees) {
-            employee.setTested(false);
-        }
+        workingEmployees.forEach(employee -> employee.setTested(false));
         if (!toReturn) {
             return false;
         }
 
         if (jobToReplace != null) {
-            job = new Job(duration, jobType, workingEmployees, jobToReplace.getId());
+            job = new Job(duration / workingEmployees.size(), jobType, workingEmployees, jobToReplace.getId());
         } else {
-            job = new Job(duration, jobType, workingEmployees);
+            job = new Job(duration / workingEmployees.size(), jobType, workingEmployees);
         }
 
         listOfJobs.add(job);
-        for (Employee employee : workingEmployees) {
-            employee.getListOfJobs().add(job);
-        }
+        workingEmployees.forEach(employee -> employee.getListOfJobs().add(job));
+
         return true;
     }
 
@@ -141,7 +150,7 @@ public class Firm implements Serializable {
         }
     }
 
-    public boolean removeEmployee(int id) throws NullPointerException{
+    public boolean removeEmployee(int id) throws NullPointerException {
         Employee employeeToRemove = getObjectByID(listOfEmployees, id);
         listOfEmployees.remove(employeeToRemove);
         boolean toReturn = true;
@@ -154,7 +163,7 @@ public class Firm implements Serializable {
         return toReturn;
     }
 
-    public boolean makeEmployeeSick(int id) throws NullPointerException{
+    public boolean makeEmployeeSick(int id) throws NullPointerException {
         Employee sickEmployee = getObjectByID(listOfEmployees, id);
         sickEmployee.setActive(false);
         boolean toReturn = true;
@@ -183,4 +192,6 @@ public class Firm implements Serializable {
     public List<Job> getListOfJobs() {
         return listOfJobs;
     }
+
+
 }

@@ -15,15 +15,16 @@ public abstract class Employee implements Serializable {
     private int id;
     private String firstName;
     private String secondName;
-    EmployeeType employeeType;
-    int tariff;
-    private int contractLength = 20;
+    private int contractLength;
     private List<Job> listOfJobs;
-    Set<JobType> canDoTypeOfJobs;
     private boolean active;
+    protected Set<JobType> canDoTypeOfJobs;
+    protected EmployeeType employeeType;
+    protected int tariff;
 
-    public Employee(String firstName, String secondName) {
+    Employee(String firstName, String secondName) {
         active = true;
+        contractLength = 20;
         listOfJobs = new ArrayList<>();
         canDoTypeOfJobs = new HashSet<>();
         this.id = idCounter;
@@ -101,11 +102,17 @@ public abstract class Employee implements Serializable {
         this.active = active;
     }
 
-    public String action(JobType jobType, Employee employee) {
-        if (canDoTypeOfJobs.contains(jobType) && active) {
-            return jobType.action(employee);
+    public String action(JobType jobType, Employee... employee) {
+        boolean isAble;
+        if (employee.length == 2) {
+            isAble = employee[1].getWorkingHours() > 0;
         } else {
-            return "Nemoze vykonat pracu lebo je chory";
+            isAble = employee[0].getWorkingHours() > 0;
+        }
+        if (canDoTypeOfJobs.contains(jobType) && active && isAble) {
+            return jobType.action(employee[0]);
+        } else {
+            return "Nemoze vykonat pracu lebo je chory alebo ma nulovy uvazok";
         }
     }
 
@@ -136,15 +143,18 @@ public abstract class Employee implements Serializable {
 
     @Override
     public String toString() {
-        String toReturn = "\n\nID : " + id
+        StringBuilder sb = new StringBuilder();
+        sb.append("\n\nID : " + id
                 + "\n meno : " + firstName
                 + "\n priezvisko : " + secondName
-                + "\n pozicia : " + employeeType + "\nList prac : ";
+                + "\n pozicia : " + employeeType + "\nList prac : ");
         for (Job job : listOfJobs) {
-            toReturn = toReturn.concat(" \nID : " + job.getId()
+            sb.append(" \nID : " + job.getId()
                     + "\n  pocet hodin : " + job.getDuration()
                     + "\n  typ prace : " + job.getJobType());
         }
-        return toReturn;
+        return sb.toString();
     }
+
+
 }

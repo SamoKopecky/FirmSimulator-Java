@@ -21,11 +21,11 @@ public enum JobType implements Serializable {
         }
         if (this.equals(DESIGN_JOB)) {
             String fullName = employee.getFirstName() + " " + employee.getSecondName();
-            String toReturn = "";
+            StringBuilder sb = new StringBuilder();
             for (int i = fullName.length() - 1; i >= 0; i--) {
-                toReturn = toReturn.concat(String.valueOf(fullName.charAt(i)));
+                sb.append(fullName.charAt(i));
             }
-            return toReturn;
+            return sb.toString();
         }
         if (this.equals(ADMINISTRATIVE_JOB)) {
             return employee.toString();
