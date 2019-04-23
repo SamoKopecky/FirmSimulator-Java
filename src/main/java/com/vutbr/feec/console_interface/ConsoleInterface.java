@@ -141,7 +141,7 @@ public class ConsoleInterface {
         Employee employee = firm.getObjectByID(firm.getListOfEmployees(), id);
         jobTypeMap.forEach((key, value) -> {
             if (employee.getCanDoTypeOfJobs().contains(value)) {
-                System.out.println(key + " : " + value);
+                System.out.println(key + " : " + value.getDesc());
             }
         });
         jobType = scanChar(jobTypeMap);
@@ -199,7 +199,7 @@ public class ConsoleInterface {
 
     private void printJobs() {
         for (EmployeeType type : EmployeeType.values()) {
-            System.out.println(type + ":");
+            System.out.println(type.getDesc() + ":");
             for (Employee employee : firm.getListOfEmployees()) {
                 if (employee.getEmployeeType().equals(type)) {
                     System.out.println("ID : " + employee.getId() + " volne uvazky : " + employee.getContractLength());
@@ -210,7 +210,7 @@ public class ConsoleInterface {
     }
 
     private void addJob() {
-        jobTypeMap.forEach((key, value) -> System.out.println(key + " : " + value));
+        jobTypeMap.forEach((key, value) -> System.out.println(key + " : " + value.getDesc()));
         JobType jobType = scanChar(jobTypeMap);
         System.out.print("dlzka prace : ");
         int duration = scanInt();
@@ -230,7 +230,7 @@ public class ConsoleInterface {
         System.out.print("priezvisko : ");
         String secondName = sc.nextLine();
         System.out.print("pozicia : \n");
-        employeeTypeMap.forEach((key, value) -> System.out.println(key + " : " + value));
+        employeeTypeMap.forEach((key, value) -> System.out.println(key + " : " + value.getDesc()));
         EmployeeType employeeType = scanChar(employeeTypeMap);
         if (!firm.addEmployee(firstName, secondName, employeeType))
             System.out.println("COE already exists");

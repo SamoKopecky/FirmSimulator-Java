@@ -61,7 +61,7 @@ public class Job implements Serializable {
     public String toString() {
         return "Job{" +
                 "duration=" + duration +
-                ", jobType=" + jobType +
+                ", jobType=" + jobType.getDesc() +
                 ", id=" + id +
                 ", workingEmployees=" + workingEmployees +
                 '}';

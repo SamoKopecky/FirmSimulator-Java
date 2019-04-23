@@ -44,13 +44,15 @@ public class Firm implements Serializable {
     public int getMonthlyExpenses() {
         int expenses = 0;
         int duration;
+        int numberOfEmployees;
 
         for (Job job : listOfJobs) {
             duration = job.getDuration();
+            numberOfEmployees = job.getWorkingEmployees().size();
             if (duration > 31) {
                 duration = 31;
             }
-            expenses += duration * job.getWorkingEmployees().get(0).getTariff();
+            expenses += duration * job.getWorkingEmployees().get(0).getTariff() * numberOfEmployees;
         }
         return expenses;
     }

@@ -147,11 +147,11 @@ public abstract class Employee implements Serializable {
         sb.append("\n\nID : " + id
                 + "\n meno : " + firstName
                 + "\n priezvisko : " + secondName
-                + "\n pozicia : " + employeeType + "\nList prac : ");
+                + "\n pozicia : " + employeeType.getDesc() + "\nList prac : ");
         for (Job job : listOfJobs) {
             sb.append(" \nID : " + job.getId()
                     + "\n  pocet hodin : " + job.getDuration()
-                    + "\n  typ prace : " + job.getJobType());
+                    + "\n  typ prace : " + job.getJobType().getDesc());
         }
         return sb.toString();
     }

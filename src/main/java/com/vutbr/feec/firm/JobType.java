@@ -5,7 +5,19 @@ import com.vutbr.feec.employee.Employee;
 import java.io.Serializable;
 
 public enum JobType implements Serializable {
-    ADMINISTRATIVE_JOB, TECHNICAL_JOB, DESIGN_JOB;
+    ADMINISTRATIVE_JOB("Administrativa"),
+    TECHNICAL_JOB("Tehcnicka praca"),
+    DESIGN_JOB("Vyvoj");
+
+    private String desc;
+
+    JobType(String desc) {
+        this.desc = desc;
+    }
+
+    public String getDesc() {
+        return desc;
+    }
 
     public String action(Employee employee) {
         if (this.equals(TECHNICAL_JOB)) {
@@ -13,7 +25,7 @@ public enum JobType implements Serializable {
             String fullName = employee.getFirstName() + employee.getSecondName();
             int count = 0;
             for (char c : fullName.toCharArray()) {
-                if(vowels.contains(String.valueOf(c))) {
+                if (vowels.contains(String.valueOf(c))) {
                     count++;
                 }
             }
