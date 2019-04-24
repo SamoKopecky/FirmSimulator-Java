@@ -2,7 +2,7 @@ package com.vutbr.feec.employee;
 
 import com.vutbr.feec.firm.JobType;
 
-public class CEO extends Employee{
+public class CEO extends Employee {
 
     private static final int TARIFF = 350;
 

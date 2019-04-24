@@ -74,42 +74,8 @@ public class Firm implements Serializable {
             }
         }
 
-        int tariff = 0;
-        int maxWork = 0;
-        List<Employee> workingEmployees = new ArrayList<>();
-        List<Employee> capableEmployees = new ArrayList<>();
+        List<Employee> workingEmployees = getAvailableEmployees(jobType);
         Job job;
-
-        for (Employee employee : listOfEmployees) {
-            if (employee.getCanDoTypeOfJobs().contains(jobType) && employee.isActive()) {
-                capableEmployees.add(employee);
-            }
-        }
-        capableEmployees.sort(Comparator.comparingInt(Employee::getTariff));
-
-        for (Employee employee : capableEmployees) {
-            int size = employee.getListOfJobs().size();
-            if (size > maxWork) {
-                maxWork = size;
-            }
-        }
-
-        int indexToCheck = 0;
-        for (int i = 0; i <= maxWork; i++) {
-            for (Employee employee : capableEmployees) {
-                if (employee.getListOfJobs().size() == i && workingEmployees.isEmpty() && !employee.isTested()) {
-                    workingEmployees.add(employee);
-                    tariff = employee.getTariff();
-                    indexToCheck = i;
-                } else if (employee.getListOfJobs().size() == indexToCheck && employee.getTariff() == tariff
-                        && !workingEmployees.contains(employee) && !employee.isTested()) {
-                    workingEmployees.add(employee);
-                }
-            }
-        }
-        for (Employee employee : workingEmployees) {
-            employee.setTested(true);
-        }
 
         boolean toReturn = true;
         removeOverworkedEmployees(duration, workingEmployees);
@@ -140,6 +106,44 @@ public class Firm implements Serializable {
         return true;
     }
 
+    private List<Employee> getAvailableEmployees(JobType jobType) {
+        int tariff = 0;
+        int maxWork = 0;
+        List<Employee> workingEmployees = new ArrayList<>();
+        List<Employee> capableEmployees = new ArrayList<>();
+
+        for (Employee employee : listOfEmployees) {
+            if (employee.getCanDoTypeOfJobs().contains(jobType) && employee.isActive()) {
+                capableEmployees.add(employee);
+            }
+        }
+        capableEmployees.sort(Comparator.comparingInt(Employee::getTariff));
+
+        for (Employee employee : capableEmployees) {
+            int size = employee.getListOfJobs().size();
+            if (size > maxWork) {
+                maxWork = size;
+            }
+        }
+
+        int indexToCheck = 0;
+        for (int i = 0; i <= maxWork; i++) {
+            for (Employee employee : capableEmployees) {
+                if (employee.getListOfJobs().size() == i && workingEmployees.isEmpty() && !employee.isTested()) {
+                    workingEmployees.add(employee);
+                    tariff = employee.getTariff();
+                    indexToCheck = i;
+                } else if (employee.getListOfJobs().size() == indexToCheck && employee.getTariff() == tariff
+                        && !workingEmployees.contains(employee) && !employee.isTested()) {
+                    workingEmployees.add(employee);
+                }
+            }
+        }
+        workingEmployees.forEach(employee -> employee.setTested(true));
+
+        return workingEmployees;
+    }
+
     private void removeOverworkedEmployees(int duration, List<Employee> workingEmployees) {
         List<Employee> copy = new ArrayList<>();
         for (Employee employee : workingEmployees) {
@@ -147,9 +151,7 @@ public class Firm implements Serializable {
                 copy.add(employee);
             }
         }
-        for (Employee employee : copy) {
-            workingEmployees.remove(employee);
-        }
+        copy.forEach((copy::remove));
     }
 
     public boolean removeEmployee(int id) throws NullPointerException {

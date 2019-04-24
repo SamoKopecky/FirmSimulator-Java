@@ -10,17 +10,17 @@ import java.util.List;
 import java.util.Set;
 
 public abstract class Employee implements Serializable {
-    private boolean tested = false;
     private static int idCounter = 0;
+    protected Set<JobType> canDoTypeOfJobs;
+    protected EmployeeType employeeType;
+    protected int tariff;
+    private boolean tested = false;
     private int id;
     private String firstName;
     private String secondName;
     private int contractLength;
     private List<Job> listOfJobs;
     private boolean active;
-    protected Set<JobType> canDoTypeOfJobs;
-    protected EmployeeType employeeType;
-    protected int tariff;
 
     Employee(String firstName, String secondName) {
         active = true;
@@ -41,12 +41,12 @@ public abstract class Employee implements Serializable {
         return temp;
     }
 
-    public void setTested(boolean tested) {
-        this.tested = tested;
-    }
-
     public boolean isTested() {
         return tested;
+    }
+
+    public void setTested(boolean tested) {
+        this.tested = tested;
     }
 
     public void decrementId() {

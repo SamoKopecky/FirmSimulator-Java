@@ -6,10 +6,10 @@ import java.io.Serializable;
 import java.util.List;
 
 public class Job implements Serializable {
+    private static int idCounter = 0;
     private int duration;
     private JobType jobType;
     private int id;
-    private static int idCounter = 0;
     private List<Employee> workingEmployees;
 
     Job(int duration, JobType jobType, List<Employee> workingEmployees, int id) {

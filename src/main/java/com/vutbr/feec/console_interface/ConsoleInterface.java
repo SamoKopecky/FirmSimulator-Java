@@ -1,19 +1,22 @@
 package com.vutbr.feec.console_interface;
 
-import com.vutbr.feec.io.Database;
 import com.vutbr.feec.employee.Employee;
 import com.vutbr.feec.employee.EmployeeType;
-import com.vutbr.feec.firm.JobType;
 import com.vutbr.feec.firm.Firm;
+import com.vutbr.feec.firm.JobType;
+import com.vutbr.feec.io.Database;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
 
 public class ConsoleInterface {
+    private final char[] ALPHABET;
     private Database database = new Database();
     private Firm firm;
-    private final char[] ALPHABET;
     private Map<Character, Option> options;
     private Map<Character, EmployeeType> employeeTypeMap;
     private Map<Character, JobType> jobTypeMap;
