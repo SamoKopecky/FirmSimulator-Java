@@ -7,11 +7,11 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-public class Firm implements Serializable {
+public class Company implements Serializable {
     private List<Employee> listOfEmployees;
     private List<Job> listOfJobs;
 
-    public Firm() {
+    public Company() {
         listOfJobs = new ArrayList<>();
         listOfEmployees = new ArrayList<>();
     }

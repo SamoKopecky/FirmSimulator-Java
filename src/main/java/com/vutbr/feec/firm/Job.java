@@ -27,16 +27,16 @@ public class Job implements Serializable {
         this.jobType = jobType;
     }
 
-    public void decreaseJobDuration(int duration, Firm firm) {
+    public void decreaseJobDuration(int duration, Company company) {
         this.duration -= duration;
         if (this.duration <= 0) {
-            for (Employee employee : firm.getListOfEmployees()) {
-                for (Job job : firm.getListOfJobs()) {
+            for (Employee employee : company.getListOfEmployees()) {
+                for (Job job : company.getListOfJobs()) {
                     if (job.getId() == id)
                         employee.removeJob(job);
                 }
             }
-            firm.getListOfJobs().remove(firm.getObjectByID(firm.getListOfJobs(), id));
+            company.getListOfJobs().remove(company.getObjectByID(company.getListOfJobs(), id));
         }
     }
 

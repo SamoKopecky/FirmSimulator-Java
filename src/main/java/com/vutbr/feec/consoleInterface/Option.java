@@ -1,4 +1,4 @@
-package com.vutbr.feec.console_interface;
+package com.vutbr.feec.consoleInterface;
 
 public enum Option {
     ADD_EMPLOYEE("Pridat zamestnanca"),

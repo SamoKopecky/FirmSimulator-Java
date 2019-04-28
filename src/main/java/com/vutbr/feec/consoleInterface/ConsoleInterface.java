@@ -1,8 +1,8 @@
-package com.vutbr.feec.console_interface;
+package com.vutbr.feec.consoleInterface;
 
 import com.vutbr.feec.employee.Employee;
 import com.vutbr.feec.employee.EmployeeType;
-import com.vutbr.feec.firm.Firm;
+import com.vutbr.feec.firm.Company;
 import com.vutbr.feec.firm.JobType;
 import com.vutbr.feec.io.Database;
 
@@ -16,16 +16,16 @@ import java.util.Scanner;
 public class ConsoleInterface {
     private final char[] ALPHABET;
     private Database database = new Database();
-    private Firm firm;
+    private Company company;
     private Map<Character, Option> options;
     private Map<Character, EmployeeType> employeeTypeMap;
     private Map<Character, JobType> jobTypeMap;
     private Scanner sc = new Scanner(System.in);
     private Option option;
 
-    public ConsoleInterface(Firm firm) {
+    public ConsoleInterface(Company company) {
         ALPHABET = "abcdefghijklmnopqrstuvwxyz".toUpperCase().toCharArray();
-        this.firm = firm;
+        this.company = company;
         options = new HashMap<>();
         employeeTypeMap = new HashMap<>();
         jobTypeMap = new HashMap<>();
@@ -72,11 +72,11 @@ public class ConsoleInterface {
                     addJob();
                     break;
                 case DB_EXPORT:
-                    database.dbExport(firm, new File(database.getCurrDate()));
+                    database.dbExport(company, new File(database.getCurrDate()));
                     break;
                 case DB_IMPORT:
                     System.out.println("zvol si z ktoreho suboru chces importovat databasu");
-                    firm = database.dbImport(new File(sc.nextLine()));
+                    company = database.dbImport(new File(sc.nextLine()));
                     break;
                 case PRINT_JOBS:
                     printJobs();
@@ -94,7 +94,7 @@ public class ConsoleInterface {
                 case HEALTHY_EMPLOYEE:
                     System.out.println("Zadaj ID : ");
                     id = scanInt();
-                    firm.getObjectByID(firm.getListOfEmployees(), id).setActive(true);
+                    company.getObjectByID(company.getListOfEmployees(), id).setActive(true);
                     break;
                 case ACTIVATE_EMPLOYEE:
                     activateEmployee();
@@ -106,7 +106,7 @@ public class ConsoleInterface {
                     setContractDuration();
                     break;
                 case PRINT_MONTHLY_EXPENSES:
-                    System.out.println(firm.getMonthlyExpenses());
+                    System.out.println(company.getMonthlyExpenses());
                     sc.nextLine();
                     break;
             }
@@ -123,7 +123,7 @@ public class ConsoleInterface {
         sc.nextLine();
         System.out.println("Zadaj pocet hodin noveho uvazku : ");
         duration = scanInt();
-        firm.getObjectByID(firm.getListOfEmployees(), id).setMonthlyJobDuration(duration);
+        company.getObjectByID(company.getListOfEmployees(), id).setMonthlyJobDuration(duration);
     }
 
     private void decreaseJobDuration() {
@@ -133,7 +133,7 @@ public class ConsoleInterface {
         id = scanInt();
         System.out.println("Zadaj pocet hodin o kolko chces znizit pracu : ");
         duration = scanInt();
-        firm.getObjectByID(firm.getListOfJobs(), id).decreaseJobDuration(duration, firm);
+        company.getObjectByID(company.getListOfJobs(), id).decreaseJobDuration(duration, company);
     }
 
     private void activateEmployee() {
@@ -141,7 +141,7 @@ public class ConsoleInterface {
         JobType jobType;
         System.out.println("Zadaj ID : ");
         id = scanInt();
-        Employee employee = firm.getObjectByID(firm.getListOfEmployees(), id);
+        Employee employee = company.getObjectByID(company.getListOfEmployees(), id);
         jobTypeMap.forEach((key, value) -> {
             if (employee.getCanDoTypeOfJobs().contains(value)) {
                 System.out.println(key + " : " + value.getDesc());
@@ -151,7 +151,7 @@ public class ConsoleInterface {
         if (employee.getEmployeeType().equals(EmployeeType.ASSISTANT)) {
             System.out.println("ID : ");
             id = scanInt();
-            System.out.println(employee.action(jobType, firm.getObjectByID(firm.getListOfEmployees(), id), employee));
+            System.out.println(employee.action(jobType, company.getObjectByID(company.getListOfEmployees(), id), employee));
         } else {
             System.out.println(employee.action(jobType, employee));
         }
@@ -170,17 +170,17 @@ public class ConsoleInterface {
         } while (option != 'A' && option != 'B');
         switch (option) {
             case 'A':
-                firm.getListOfEmployees().sort(Comparator.comparing(Employee::getSecondName));
+                company.getListOfEmployees().sort(Comparator.comparing(Employee::getSecondName));
                 break;
             case 'B':
-                firm.getListOfEmployees().sort(Comparator.comparingInt(Employee::hashCode));
+                company.getListOfEmployees().sort(Comparator.comparingInt(Employee::hashCode));
                 break;
         }
-        for (Employee employee : firm.getListOfEmployees()) {
+        for (Employee employee : company.getListOfEmployees()) {
             System.out.println(employee.toString());
         }
         sc.nextLine();
-        firm.getListOfEmployees().sort(Comparator.comparingInt(Employee::hashCode));
+        company.getListOfEmployees().sort(Comparator.comparingInt(Employee::hashCode));
     }
 
     private void fireEmployeeOrSickEmployee(boolean fireEmployee) {
@@ -188,9 +188,9 @@ public class ConsoleInterface {
         int id = scanInt();
         boolean success;
         if (fireEmployee) {
-            success = firm.removeEmployee(id);
+            success = company.removeEmployee(id);
         } else {
-            success = firm.makeEmployeeSick(id);
+            success = company.makeEmployeeSick(id);
         }
         if (success) {
             System.out.println("podarilo sa rozdelit pracu");
@@ -203,7 +203,7 @@ public class ConsoleInterface {
     private void printJobs() {
         for (EmployeeType type : EmployeeType.values()) {
             System.out.println(type.getDesc() + ":");
-            for (Employee employee : firm.getListOfEmployees()) {
+            for (Employee employee : company.getListOfEmployees()) {
                 if (employee.getEmployeeType().equals(type)) {
                     System.out.println("ID : " + employee.getId() + " volne uvazky : " + employee.getContractLength());
                 }
@@ -218,7 +218,7 @@ public class ConsoleInterface {
         System.out.print("dlzka prace : ");
         int duration = scanInt();
         boolean wasAddingSuccessful;
-        wasAddingSuccessful = firm.addJob(jobType, duration, null);
+        wasAddingSuccessful = company.addJob(jobType, duration, null);
         if (!wasAddingSuccessful) {
             System.out.println("Nepodarilo sa rozdelit pracu");
         } else {
@@ -235,7 +235,7 @@ public class ConsoleInterface {
         System.out.print("pozicia : \n");
         employeeTypeMap.forEach((key, value) -> System.out.println(key + " : " + value.getDesc()));
         EmployeeType employeeType = scanChar(employeeTypeMap);
-        if (!firm.addEmployee(firstName, secondName, employeeType))
+        if (!company.addEmployee(firstName, secondName, employeeType))
             System.out.println("COE already exists");
     }
 
