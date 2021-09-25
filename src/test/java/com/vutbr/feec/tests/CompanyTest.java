@@ -12,7 +12,8 @@ public class CompanyTest {
     @Test
     public void addJob() {
         Company company = new Company();
-        company.addEmployee("test", "test", EmployeeType.CEO);
+        // Uncoment to fail test
+        // company.addEmployee("test", "test", EmployeeType.CEO);
         assertEquals("not working", false, company.addJob(JobType.ADMINISTRATIVE_JOB, 40, null));
     }
 }

@@ -8,7 +8,7 @@ import com.vutbr.feec.firm.JobType;
 public class App {
     public static void main(String[] args) {
         Company company = new Company();
-        //createTestDB(company);
+        createTestDB(company);
         ConsoleInterface consoleInterface = new ConsoleInterface(company);
         consoleInterface.mainLoop();
     }
